@@ -36,6 +36,7 @@ export default function Home() {
     '@type': 'LocalBusiness',
     name: SITE_CONFIG.name,
     url: SITE_CONFIG.website,
+    hasMap: SITE_CONFIG.mapLink,
     image: `${SITE_CONFIG.website}/images/studio-hero.webp`,
     telephone: SITE_CONFIG.phone,
     email: SITE_CONFIG.email,

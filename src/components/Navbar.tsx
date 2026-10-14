@@ -76,18 +76,18 @@ export default function Navbar() {
               target="_blank"
               rel="noreferrer"
               aria-label="Instagram (opens in a new tab)"
-              className="text-neutral-400 transition-colors hover:text-[#e1306c] focus-visible:outline-offset-4"
+              className="flex h-10 w-10 items-center justify-center text-neutral-400 transition-colors hover:text-[#e1306c] focus-visible:outline-offset-4"
             >
-              <InstagramMark className="h-[18px] w-[18px]" />
+              <InstagramMark className="h-6 w-6" />
             </a>
             <a
               href={SITE_CONFIG.youtubeLink}
               target="_blank"
               rel="noreferrer"
               aria-label="YouTube (opens in a new tab)"
-              className="text-neutral-400 transition-colors hover:text-[#ff0033] focus-visible:outline-offset-4"
+              className="flex h-10 w-10 items-center justify-center text-neutral-400 transition-colors hover:text-[#ff0033] focus-visible:outline-offset-4"
             >
-              <YouTubeMark className="h-[19px] w-[19px]" />
+              <YouTubeMark className="h-6 w-6" />
             </a>
           </div>
           <Link
@@ -135,7 +135,7 @@ export default function Navbar() {
                 rel="noreferrer"
                 className="inline-flex min-h-10 items-center gap-2 py-2 text-sm font-medium text-neutral-300 transition hover:text-[#e1306c]"
               >
-                <InstagramMark className="h-[18px] w-[18px] shrink-0" />
+                <InstagramMark className="h-6 w-6 shrink-0" />
                 Instagram
                 <span className="sr-only">(opens in a new tab)</span>
               </a>
@@ -145,7 +145,7 @@ export default function Navbar() {
                 rel="noreferrer"
                 className="inline-flex min-h-10 items-center gap-2 py-2 text-sm font-medium text-neutral-300 transition hover:text-[#ff0033]"
               >
-                <YouTubeMark className="h-[19px] w-[19px] shrink-0" />
+                <YouTubeMark className="h-6 w-6 shrink-0" />
                 YouTube
                 <span className="sr-only">(opens in a new tab)</span>
               </a>

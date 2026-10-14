@@ -34,7 +34,15 @@ export default function Footer() {
             <h2 className="mb-4 text-xs font-bold uppercase tracking-[0.15em] text-neutral-300">
               Say hello
             </h2>
-            <p className="mb-3 text-sm leading-6 text-neutral-400">{SITE_CONFIG.location}</p>
+            <a
+              href={SITE_CONFIG.mapLink}
+              target="_blank"
+              rel="noreferrer"
+              className="mb-3 block text-sm leading-6 text-neutral-400 transition hover:text-white"
+            >
+              {SITE_CONFIG.location}
+              <span className="sr-only"> (opens Google Maps in a new tab)</span>
+            </a>
             <a
               href={`tel:${SITE_CONFIG.phoneHref}`}
               className="inline-flex items-center gap-2 text-sm font-semibold text-white transition hover:text-brand-red"

@@ -150,9 +150,15 @@ export default function Contact() {
                 <MapPin size={18} className="mt-1 shrink-0 text-brand-gold" aria-hidden="true" />
                 <div>
                   <p className="mb-1 text-xs text-neutral-500">Find us</p>
-                  <p className="text-base font-semibold leading-6 text-white">
+                  <a
+                    href={SITE_CONFIG.mapLink}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-base font-semibold leading-6 text-white transition hover:text-brand-red"
+                  >
                     {SITE_CONFIG.location}
-                  </p>
+                    <span className="sr-only"> (opens Google Maps in a new tab)</span>
+                  </a>
                 </div>
               </div>
             </div>
