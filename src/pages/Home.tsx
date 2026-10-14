@@ -38,6 +38,7 @@ export default function Home() {
     url: SITE_CONFIG.website,
     image: `${SITE_CONFIG.website}/images/studio-hero.webp`,
     telephone: SITE_CONFIG.phone,
+    email: SITE_CONFIG.email,
     address: {
       '@type': 'PostalAddress',
       addressLocality: 'Nooranad',

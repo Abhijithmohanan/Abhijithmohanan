@@ -41,7 +41,7 @@ For another static host, publish the contents of `dist/`, configure its SPA fall
 
 ## Contact form
 
-The contact form validates its fields in the browser and prepares an inquiry in WhatsApp using the configured business number. The visitor reviews and sends the message themselves; no form data is sent to or stored by this website.
+The contact form validates its fields in the browser and prepares an inquiry in WhatsApp using the configured business number. The visitor reviews and sends the message themselves; no form data is sent to or stored by this website. Visitors can also email the studio directly at `blackhumorproductions@outlook.com` using the site's `mailto:` link.
 
 ## Content and assets
 

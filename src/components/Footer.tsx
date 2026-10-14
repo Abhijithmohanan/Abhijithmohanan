@@ -1,4 +1,4 @@
-import { ArrowUpRight, Phone } from 'lucide-react';
+import { ArrowUpRight, Mail, Phone } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { SITE_CONFIG } from '../config/site';
 
@@ -41,6 +41,13 @@ export default function Footer() {
             >
               <Phone size={15} aria-hidden="true" />
               {SITE_CONFIG.phoneDisplay}
+            </a>
+            <a
+              href={`mailto:${SITE_CONFIG.email}`}
+              className="mt-3 flex w-fit items-center gap-2 text-sm text-neutral-400 transition hover:text-white"
+            >
+              <Mail size={14} aria-hidden="true" />
+              {SITE_CONFIG.email}
             </a>
             <a
               href={SITE_CONFIG.whatsappLink}

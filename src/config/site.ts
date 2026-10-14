@@ -12,6 +12,7 @@ import {
 export const SITE_CONFIG = {
   name: 'Black Humor Productions',
   location: 'Nooranad, near Police Station, Kerala, India',
+  email: 'blackhumorproductions@outlook.com',
   phone: '+91 9544 405 504',
   phoneDisplay: '9544 405 504',
   phoneHref: '+919544405504',

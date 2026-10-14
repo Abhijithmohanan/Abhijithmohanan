@@ -1,6 +1,6 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { MapPin, MessageCircle, Phone } from 'lucide-react';
+import { Mail, MapPin, MessageCircle, Phone } from 'lucide-react';
 import { useSearchParams } from 'react-router-dom';
 import { SITE_CONFIG } from '../config/site';
 
@@ -78,7 +78,7 @@ export default function Contact() {
         <title>Contact the Studio | {SITE_CONFIG.name}</title>
         <meta
           name="description"
-          content="Start a project with Black Humor Productions in Nooranad, Kerala. Call or WhatsApp +91 9544 405 504."
+          content="Start a project with Black Humor Productions in Nooranad, Kerala. Email, call or WhatsApp +91 9544 405 504."
         />
         <meta property="og:title" content={`Contact the Studio | ${SITE_CONFIG.name}`} />
       </Helmet>
@@ -131,6 +131,18 @@ export default function Contact() {
                   >
                     Start a conversation
                     <span className="sr-only"> (opens in a new tab)</span>
+                  </a>
+                </div>
+              </div>
+              <div className="flex gap-4 border-t border-white/10 pt-5">
+                <Mail size={18} className="mt-1 shrink-0 text-brand-gold" aria-hidden="true" />
+                <div>
+                  <p className="mb-1 text-xs text-neutral-500">Email</p>
+                  <a
+                    href={`mailto:${SITE_CONFIG.email}`}
+                    className="break-all text-base font-semibold text-white transition hover:text-brand-red"
+                  >
+                    {SITE_CONFIG.email}
                   </a>
                 </div>
               </div>
