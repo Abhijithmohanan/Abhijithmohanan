@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { ArrowUpRight, ChevronDown, Menu, Phone, X } from 'lucide-react';
 import { SITE_CONFIG } from '../config/site';
 
 const links = [
@@ -56,7 +56,7 @@ export default function Navbar() {
           </span>
         </Link>
 
-        <div className="hidden items-center gap-8 md:flex">
+        <div className="hidden items-center gap-8 lg:flex">
           {links.map((link) => (
             <NavLink
               key={link.path}
@@ -70,26 +70,7 @@ export default function Navbar() {
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="hidden items-center gap-3 lg:flex">
-            <a
-              href={SITE_CONFIG.instagramLink}
-              target="_blank"
-              rel="noreferrer"
-              aria-label="Instagram (opens in a new tab)"
-              className="flex h-10 w-10 items-center justify-center text-neutral-400 transition-colors hover:text-[#e1306c] focus-visible:outline-offset-4"
-            >
-              <InstagramMark className="h-6 w-6" />
-            </a>
-            <a
-              href={SITE_CONFIG.youtubeLink}
-              target="_blank"
-              rel="noreferrer"
-              aria-label="YouTube (opens in a new tab)"
-              className="flex h-10 w-10 items-center justify-center text-neutral-400 transition-colors hover:text-[#ff0033] focus-visible:outline-offset-4"
-            >
-              <YouTubeMark className="h-6 w-6" />
-            </a>
-          </div>
+          <ConnectWithUs className="hidden lg:block" />
           <Link
             to="/contact"
             className="rounded-full bg-brand-button px-4 py-2.5 text-[10px] font-bold uppercase tracking-[0.12em] text-white transition hover:bg-brand-button-hover focus-visible:outline-offset-4 sm:px-5 sm:text-[11px]"
@@ -98,7 +79,7 @@ export default function Navbar() {
           </Link>
           <button
             type="button"
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-white transition hover:border-white/30 md:hidden"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-white transition hover:border-white/30 lg:hidden"
             onClick={() => setIsOpen((open) => !open)}
             aria-label={isOpen ? 'Close navigation menu' : 'Open navigation menu'}
             aria-expanded={isOpen}
@@ -110,7 +91,7 @@ export default function Navbar() {
       </nav>
 
       {isOpen && (
-        <div id="mobile-navigation" className="border-t border-white/10 bg-brand-dark md:hidden">
+        <div id="mobile-navigation" className="border-t border-white/10 bg-brand-dark lg:hidden">
           <div className="mx-auto max-w-7xl space-y-1 px-5 py-3 sm:px-8">
             {links.map((link) => (
               <NavLink
@@ -128,32 +109,155 @@ export default function Navbar() {
                 {link.name}
               </NavLink>
             ))}
-            <div className="flex items-center gap-5 border-t border-white/10 px-4 pt-4">
-              <a
-                href={SITE_CONFIG.instagramLink}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex min-h-10 items-center gap-2 py-2 text-sm font-medium text-neutral-300 transition hover:text-[#e1306c]"
-              >
-                <InstagramMark className="h-6 w-6 shrink-0" />
-                Instagram
-                <span className="sr-only">(opens in a new tab)</span>
-              </a>
-              <a
-                href={SITE_CONFIG.youtubeLink}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex min-h-10 items-center gap-2 py-2 text-sm font-medium text-neutral-300 transition hover:text-[#ff0033]"
-              >
-                <YouTubeMark className="h-6 w-6 shrink-0" />
-                YouTube
-                <span className="sr-only">(opens in a new tab)</span>
-              </a>
-            </div>
+            <ConnectWithUs
+              className="mt-2 border-t border-white/10 px-4 pt-4 lg:hidden"
+              onSelect={() => setIsOpen(false)}
+            />
           </div>
         </div>
       )}
     </header>
+  );
+}
+
+function ConnectWithUs({
+  className = '',
+  onSelect,
+}: {
+  className?: string;
+  onSelect?: () => void;
+}) {
+  const [isOpen, setIsOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const panelId = useId();
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const closeOnOutsidePointer = (event: PointerEvent) => {
+      if (!containerRef.current?.contains(event.target as Node)) setIsOpen(false);
+    };
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape') return;
+      setIsOpen(false);
+      triggerRef.current?.focus();
+    };
+
+    document.addEventListener('pointerdown', closeOnOutsidePointer);
+    document.addEventListener('keydown', closeOnEscape);
+    return () => {
+      document.removeEventListener('pointerdown', closeOnOutsidePointer);
+      document.removeEventListener('keydown', closeOnEscape);
+    };
+  }, [isOpen]);
+
+  const options = [
+    {
+      title: 'Instagram',
+      subtitle: 'Follow our work',
+      href: SITE_CONFIG.instagramLink,
+      icon: <InstagramMark className="h-6 w-6" />,
+      external: true,
+      tone: 'text-[#e1306c]',
+    },
+    {
+      title: 'YouTube',
+      subtitle: 'Watch our videos',
+      href: SITE_CONFIG.youtubeLink,
+      icon: <YouTubeMark className="h-6 w-6" />,
+      external: true,
+      tone: 'text-[#ff0033]',
+    },
+    {
+      title: 'WhatsApp',
+      subtitle: 'Chat with us',
+      href: SITE_CONFIG.whatsappLink,
+      icon: <WhatsAppMark className="h-6 w-6" />,
+      external: true,
+      tone: 'text-[#25d366]',
+    },
+    {
+      title: 'Call Us',
+      subtitle: SITE_CONFIG.phone,
+      href: `tel:${SITE_CONFIG.phoneHref}`,
+      icon: <Phone size={21} strokeWidth={1.8} aria-hidden="true" />,
+      external: false,
+      tone: 'text-brand-gold',
+    },
+    {
+      title: 'Our Location',
+      subtitle: SITE_CONFIG.location,
+      href: 'https://www.google.com/maps/search/?api=1&query=Nooranad%20Police%20Station%2C%20Kerala%2C%20India',
+      icon: <GoogleMapsMark className="h-6 w-6" />,
+      external: true,
+      tone: 'text-white',
+    },
+  ];
+
+  return (
+    <div ref={containerRef} className={`relative ${className}`}>
+      <button
+        ref={triggerRef}
+        type="button"
+        aria-expanded={isOpen}
+        aria-controls={panelId}
+        onClick={() => setIsOpen((open) => !open)}
+        className="flex min-h-11 w-full items-center justify-between gap-3 rounded-full border border-brand-red/50 bg-[#151112] px-4 py-2.5 text-[10px] font-bold uppercase tracking-[0.12em] text-white transition hover:border-brand-red hover:bg-[#201416] focus-visible:outline-offset-2 lg:w-auto lg:text-[11px]"
+      >
+        Connect with us
+        <ChevronDown
+          size={15}
+          aria-hidden="true"
+          className={`text-brand-red transition-transform ${isOpen ? 'rotate-180' : ''}`}
+        />
+      </button>
+
+      {isOpen && (
+        <div
+          id={panelId}
+          className="absolute left-0 top-[calc(100%+10px)] z-[60] w-[360px] max-w-[calc(100vw-2rem)] overflow-hidden rounded-xl border border-white/10 border-t-2 border-t-brand-red bg-[#111112] p-2 shadow-[0_18px_60px_rgba(0,0,0,0.55)] lg:left-auto lg:right-0"
+        >
+          <h2 className="px-3 pb-2 pt-2.5 font-display text-[10px] font-extrabold uppercase tracking-[0.18em] text-neutral-400">
+            Connect with us
+          </h2>
+          <div className="divide-y divide-white/[0.08]">
+            {options.map((option) => (
+              <a
+                key={option.title}
+                href={option.href}
+                target={option.external ? '_blank' : undefined}
+                rel={option.external ? 'noreferrer' : undefined}
+                onClick={() => {
+                  setIsOpen(false);
+                  onSelect?.();
+                }}
+                className="group flex min-h-[62px] items-center gap-3 rounded-md px-3 py-2.5 transition-colors hover:bg-white/[0.045] focus-visible:bg-white/[0.045] focus-visible:outline-offset-[-2px]"
+              >
+                <span className={`flex h-9 w-9 shrink-0 items-center justify-center ${option.tone}`}>
+                  {option.icon}
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="block text-sm font-semibold text-white transition-colors group-hover:text-brand-gold">
+                    {option.title}
+                  </span>
+                  <span className="mt-0.5 block break-words text-xs leading-5 text-neutral-400">
+                    {option.subtitle}
+                  </span>
+                </span>
+                {option.external && (
+                  <ArrowUpRight
+                    size={15}
+                    aria-hidden="true"
+                    className="shrink-0 text-neutral-500 transition-colors group-hover:text-white"
+                  />
+                )}
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -172,6 +276,44 @@ function InstagramMark({ className }: { className: string }) {
       <rect x="3" y="3" width="18" height="18" rx="5" />
       <circle cx="12" cy="12" r="4" />
       <circle cx="17.5" cy="6.5" r="0.75" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+function WhatsAppMark({ className }: { className: string }) {
+  return (
+    <svg
+      aria-hidden="true"
+      className={className}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+    >
+      <path d="M12.04 2a9.85 9.85 0 0 0-8.48 14.86L2.2 22l5.28-1.38A9.93 9.93 0 0 0 12.03 22h.01A10 10 0 0 0 22 12 9.96 9.96 0 0 0 12.04 2Zm-.01 18.3h-.01a8.25 8.25 0 0 1-4.2-1.15l-.3-.18-3.13.82.84-3.05-.2-.32a8.3 8.3 0 1 1 7 3.88Zm4.56-6.22c-.25-.13-1.48-.73-1.71-.81-.23-.09-.4-.13-.57.13-.17.25-.65.81-.8.98-.15.17-.3.19-.55.06-.25-.13-1.06-.39-2.02-1.25-.75-.67-1.25-1.5-1.4-1.75-.15-.25-.02-.39.11-.52.12-.11.25-.3.38-.45.12-.15.16-.25.25-.42.08-.17.04-.32-.02-.45-.07-.13-.57-1.37-.78-1.88-.2-.49-.41-.42-.57-.43h-.49c-.17 0-.45.06-.68.32-.23.25-.89.87-.89 2.12s.91 2.46 1.03 2.63c.13.17 1.79 2.73 4.33 3.83.61.27 1.09.43 1.46.55.61.19 1.17.16 1.61.1.49-.08 1.48-.61 1.69-1.2.21-.59.21-1.1.15-1.2-.06-.1-.23-.17-.49-.3Z" />
+    </svg>
+  );
+}
+
+function GoogleMapsMark({ className }: { className: string }) {
+  return (
+    <svg aria-hidden="true" className={className} viewBox="0 0 24 24">
+      <path
+        fill="#34a853"
+        d="M12 1.8a8.2 8.2 0 0 0-7.1 12.3l5.9 8.1c.6.8 1.8.8 2.4 0l5.9-8.1A8.2 8.2 0 0 0 12 1.8Z"
+      />
+      <path
+        fill="#4285f4"
+        d="M12 1.8a8.2 8.2 0 0 0-7.1 12.3l2.7-3.7a4.8 4.8 0 0 1 4.4-7.3Z"
+      />
+      <path
+        fill="#fbbc04"
+        d="M4.9 14.1 7.6 10.4a4.8 4.8 0 0 0 .5 5.3l2.1 2.9-1.4 1.9-3.9-5.4Z"
+      />
+      <path
+        fill="#ea4335"
+        d="M12 1.8a8.2 8.2 0 0 1 7.1 12.3l-2.7-3.7A4.8 4.8 0 0 0 12 3.1V1.8Z"
+      />
+      <circle cx="12" cy="9.6" r="2.6" fill="#fff" />
+      <circle cx="12" cy="9.6" r="1.6" fill="#4285f4" />
     </svg>
   );
 }
