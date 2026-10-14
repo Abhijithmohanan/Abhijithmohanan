@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { Instagram, Menu, X, Youtube } from 'lucide-react';
+import { SITE_CONFIG } from '../config/site';
 
 const links = [
   { name: 'Home', path: '/' },
@@ -69,6 +70,26 @@ export default function Navbar() {
         </div>
 
         <div className="flex items-center gap-3">
+          <div className="hidden items-center gap-3 lg:flex">
+            <a
+              href={SITE_CONFIG.instagramLink}
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Instagram (opens in a new tab)"
+              className="text-neutral-400 transition-colors hover:text-white focus-visible:outline-offset-4"
+            >
+              <Instagram size={18} aria-hidden="true" />
+            </a>
+            <a
+              href={SITE_CONFIG.youtubeLink}
+              target="_blank"
+              rel="noreferrer"
+              aria-label="YouTube (opens in a new tab)"
+              className="text-neutral-400 transition-colors hover:text-white focus-visible:outline-offset-4"
+            >
+              <Youtube size={19} aria-hidden="true" />
+            </a>
+          </div>
           <Link
             to="/contact"
             className="rounded-full bg-brand-button px-4 py-2.5 text-[10px] font-bold uppercase tracking-[0.12em] text-white transition hover:bg-brand-button-hover focus-visible:outline-offset-4 sm:px-5 sm:text-[11px]"
@@ -107,6 +128,28 @@ export default function Navbar() {
                 {link.name}
               </NavLink>
             ))}
+            <div className="flex items-center gap-5 border-t border-white/10 px-4 pt-4">
+              <a
+                href={SITE_CONFIG.instagramLink}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 py-2 text-sm font-medium text-neutral-300 transition hover:text-white"
+              >
+                <Instagram size={17} aria-hidden="true" />
+                Instagram
+                <span className="sr-only">(opens in a new tab)</span>
+              </a>
+              <a
+                href={SITE_CONFIG.youtubeLink}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 py-2 text-sm font-medium text-neutral-300 transition hover:text-white"
+              >
+                <Youtube size={18} aria-hidden="true" />
+                YouTube
+                <span className="sr-only">(opens in a new tab)</span>
+              </a>
+            </div>
           </div>
         </div>
       )}

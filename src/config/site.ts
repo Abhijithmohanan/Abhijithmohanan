@@ -18,6 +18,8 @@ export const SITE_CONFIG = {
   phoneHref: '+919544405504',
   whatsappNumber: '919544405504',
   whatsappLink: 'https://wa.me/919544405504',
+  instagramLink: 'https://www.instagram.com/arun_nrd/',
+  youtubeLink: 'https://www.youtube.com/@Arun_nrd',
   website: 'https://blackhumorproductions.qd.je',
   services: [
     {
