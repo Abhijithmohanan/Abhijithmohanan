@@ -43,11 +43,8 @@ export default function Navbar() {
         <Link
           to="/"
           aria-label="Black Humor Productions home"
-          className="group flex items-center gap-3"
+          className="group flex items-center"
         >
-          <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-brand-button text-sm font-extrabold tracking-tight text-white">
-            BHP
-          </span>
           <span className="leading-none">
             <span className="font-display text-[15px] font-extrabold tracking-[0.08em] text-white sm:text-base">
               BLACK <span className="text-brand-red">HUMOR</span>

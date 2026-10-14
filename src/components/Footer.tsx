@@ -8,12 +8,9 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl px-5 py-12 sm:px-8 lg:px-12">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.3fr_0.8fr_1fr]">
           <div>
-            <Link to="/" className="inline-flex items-center gap-3" aria-label="Black Humor Productions home">
-              <span className="flex h-9 w-9 items-center justify-center rounded-md bg-brand-button text-xs font-extrabold text-white">
-                BHP
-              </span>
+            <Link to="/" className="inline-flex" aria-label="Black Humor Productions home">
               <span className="font-display text-sm font-extrabold tracking-[0.09em] text-white">
-                BLACK HUMOR
+                BLACK HUMOR <span className="text-brand-red">PRODUCTIONS</span>
               </span>
             </Link>
             <p className="mt-4 max-w-xs text-sm leading-6 text-neutral-400">
