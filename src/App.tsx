@@ -21,7 +21,7 @@ function App() {
             Skip to content
           </a>
           <Navbar />
-          <main id="main-content" className="flex-grow pt-[76px]">
+          <main id="main-content" className="flex-grow pt-[77px] sm:pt-[89px]">
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/about" element={<About />} />

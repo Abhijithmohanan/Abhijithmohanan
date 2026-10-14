@@ -1,6 +1,6 @@
-import { useEffect, useId, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState, type ReactNode } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import { ArrowUpRight, ChevronDown, Menu, Phone, X } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, ChevronDown, Menu, Phone, X } from 'lucide-react';
 import { SITE_CONFIG } from '../config/site';
 
 const links = [
@@ -12,8 +12,8 @@ const links = [
 ];
 
 const linkClass = ({ isActive }: { isActive: boolean }) =>
-  `text-sm font-semibold transition-colors hover:text-white focus-visible:outline-offset-4 ${
-    isActive ? 'text-white' : 'text-neutral-400'
+  `relative py-2 text-[13px] font-semibold transition-colors hover:text-white focus-visible:outline-offset-4 after:absolute after:inset-x-0 after:-bottom-0.5 after:h-px after:origin-left after:scale-x-0 after:bg-brand-red after:transition-transform ${
+    isActive ? 'text-white after:scale-x-100' : 'text-neutral-400'
   }`;
 
 export default function Navbar() {
@@ -39,24 +39,32 @@ export default function Navbar() {
     <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-brand-dark/90 backdrop-blur-xl">
       <nav
         aria-label="Main navigation"
-        className="mx-auto flex h-[76px] max-w-7xl items-center justify-between px-5 sm:px-8 lg:px-12"
+        className="mx-auto flex h-[76px] max-w-[1440px] items-center justify-between gap-3 px-4 sm:h-[88px] sm:px-6 xl:gap-5 xl:px-8"
       >
         <Link
           to="/"
           aria-label="Black Humor Productions home"
-          className="group flex items-center"
+          className="group flex shrink-0 items-center gap-2.5 max-[360px]:gap-1.5 sm:gap-3.5"
         >
+          <img
+            src="/images/black-humor-productions-logo.png"
+            alt=""
+            width="64"
+            height="64"
+            className="h-10 w-10 object-contain sm:h-14 sm:w-14 xl:h-16 xl:w-16"
+          />
+          <span className="h-8 w-px bg-brand-red sm:h-10" aria-hidden="true" />
           <span className="leading-none">
-            <span className="font-display text-[15px] font-extrabold tracking-[0.08em] text-white sm:text-base">
+            <span className="font-display text-[13px] font-extrabold tracking-[0.07em] text-white max-[360px]:text-[11px] sm:text-[15px] xl:text-base">
               BLACK <span className="text-brand-red">HUMOR</span>
             </span>
-            <span className="mt-1 inline-block text-[9px] font-bold uppercase tracking-[0.28em] text-neutral-400">
+            <span className="mt-1 inline-block text-[8px] font-bold uppercase tracking-[0.25em] text-neutral-400 sm:text-[9px]">
               Productions
             </span>
           </span>
         </Link>
 
-        <div className="hidden items-center gap-8 lg:flex">
+        <div className="hidden shrink-0 items-center gap-5 2xl:gap-7 xl:flex">
           {links.map((link) => (
             <NavLink
               key={link.path}
@@ -69,17 +77,38 @@ export default function Navbar() {
           ))}
         </div>
 
-        <div className="flex items-center gap-3">
-          <ConnectWithUs className="hidden lg:block" />
+        <div className="ml-auto flex shrink-0 items-center gap-2 sm:gap-3 xl:ml-0">
+          <div className="hidden items-center gap-0.5 2xl:gap-1 xl:flex">
+            <HeaderIconLink
+              href={SITE_CONFIG.instagramLink}
+              label="Instagram"
+              newTab
+            >
+              <InstagramMark className="h-[19px] w-[19px]" />
+            </HeaderIconLink>
+            <HeaderIconLink href={SITE_CONFIG.youtubeLink} label="YouTube" newTab>
+              <YouTubeMark className="h-5 w-5" />
+            </HeaderIconLink>
+            <HeaderIconLink href={SITE_CONFIG.whatsappLink} label="WhatsApp" newTab>
+              <WhatsAppMark className="h-[19px] w-[19px]" />
+            </HeaderIconLink>
+            <HeaderIconLink href={`tel:${SITE_CONFIG.phoneHref}`} label="Call us">
+              <Phone size={18} strokeWidth={1.8} aria-hidden="true" />
+            </HeaderIconLink>
+            <HeaderIconLink href={SITE_CONFIG.mapLink} label="Our location" newTab>
+              <GoogleMapsMark className="h-[19px] w-[19px]" />
+            </HeaderIconLink>
+          </div>
+          <ConnectWithUs className="hidden xl:block" />
           <Link
             to="/contact"
-            className="rounded-full bg-brand-button px-4 py-2.5 text-[10px] font-bold uppercase tracking-[0.12em] text-white transition hover:bg-brand-button-hover focus-visible:outline-offset-4 sm:px-5 sm:text-[11px]"
+            className="hidden min-h-11 items-center justify-center gap-2 rounded-full bg-brand-button px-4 text-[10px] font-bold uppercase tracking-[0.1em] text-white transition hover:bg-brand-button-hover focus-visible:outline-offset-4 xl:inline-flex 2xl:px-5 2xl:text-[11px]"
           >
-            Start a project
+            Start a project <ArrowRight size={15} aria-hidden="true" />
           </Link>
           <button
             type="button"
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-white transition hover:border-white/30 lg:hidden"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-white transition hover:border-white/30 xl:hidden"
             onClick={() => setIsOpen((open) => !open)}
             aria-label={isOpen ? 'Close navigation menu' : 'Open navigation menu'}
             aria-expanded={isOpen}
@@ -91,7 +120,7 @@ export default function Navbar() {
       </nav>
 
       {isOpen && (
-        <div id="mobile-navigation" className="border-t border-white/10 bg-brand-dark lg:hidden">
+        <div id="mobile-navigation" className="max-h-[calc(100svh-77px)] overflow-y-auto border-t border-white/10 bg-brand-dark sm:max-h-[calc(100svh-89px)] xl:hidden">
           <div className="mx-auto max-w-7xl space-y-1 px-5 py-3 sm:px-8">
             {links.map((link) => (
               <NavLink
@@ -110,13 +139,45 @@ export default function Navbar() {
               </NavLink>
             ))}
             <ConnectWithUs
-              className="mt-2 border-t border-white/10 px-4 pt-4 lg:hidden"
+              className="mt-2 border-t border-white/10 px-4 pt-4"
               onSelect={() => setIsOpen(false)}
             />
+            <Link
+              to="/contact"
+              onClick={() => setIsOpen(false)}
+              className="mt-3 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-brand-button px-5 text-xs font-bold uppercase tracking-[0.12em] text-white transition hover:bg-brand-button-hover"
+            >
+              Start a project <ArrowRight size={16} aria-hidden="true" />
+            </Link>
           </div>
         </div>
       )}
     </header>
+  );
+}
+
+function HeaderIconLink({
+  href,
+  label,
+  newTab = false,
+  children,
+}: {
+  href: string;
+  label: string;
+  newTab?: boolean;
+  children: ReactNode;
+}) {
+  return (
+    <a
+      href={href}
+      target={newTab ? '_blank' : undefined}
+      rel={newTab ? 'noreferrer' : undefined}
+      aria-label={newTab ? `${label} (opens in a new tab)` : label}
+      title={label}
+      className="flex h-9 w-8 items-center justify-center text-neutral-400 transition-colors hover:text-white focus-visible:outline-offset-2 2xl:w-9"
+    >
+      {children}
+    </a>
   );
 }
 
@@ -188,7 +249,7 @@ function ConnectWithUs({
     {
       title: 'Our Location',
       subtitle: SITE_CONFIG.location,
-      href: 'https://www.google.com/maps/search/?api=1&query=Nooranad%20Police%20Station%2C%20Kerala%2C%20India',
+      href: SITE_CONFIG.mapLink,
       icon: <GoogleMapsMark className="h-6 w-6" />,
       external: true,
       tone: 'text-white',
@@ -203,7 +264,7 @@ function ConnectWithUs({
         aria-expanded={isOpen}
         aria-controls={panelId}
         onClick={() => setIsOpen((open) => !open)}
-        className="flex min-h-11 w-full items-center justify-between gap-3 rounded-full border border-brand-red/50 bg-[#151112] px-4 py-2.5 text-[10px] font-bold uppercase tracking-[0.12em] text-white transition hover:border-brand-red hover:bg-[#201416] focus-visible:outline-offset-2 lg:w-auto lg:text-[11px]"
+        className="flex min-h-11 w-full items-center justify-between gap-3 rounded-full border border-brand-red/50 bg-[#151112] px-4 py-2.5 text-[10px] font-bold uppercase tracking-[0.12em] text-white transition hover:border-brand-red hover:bg-[#201416] focus-visible:outline-offset-2 xl:w-auto xl:text-[11px]"
       >
         Connect with us
         <ChevronDown
@@ -216,7 +277,7 @@ function ConnectWithUs({
       {isOpen && (
         <div
           id={panelId}
-          className="absolute left-0 top-[calc(100%+10px)] z-[60] w-[360px] max-w-[calc(100vw-2rem)] overflow-hidden rounded-xl border border-white/10 border-t-2 border-t-brand-red bg-[#111112] p-2 shadow-[0_18px_60px_rgba(0,0,0,0.55)] lg:left-auto lg:right-0"
+          className="static mt-2 w-full max-w-full overflow-hidden rounded-xl border border-white/10 border-t-2 border-t-brand-red bg-[#111112] p-2 shadow-[0_18px_60px_rgba(0,0,0,0.55)] xl:absolute xl:left-auto xl:top-[calc(100%+10px)] xl:mt-0 xl:w-[360px] xl:max-w-[360px] xl:right-0"
         >
           <h2 className="px-3 pb-2 pt-2.5 font-display text-[10px] font-extrabold uppercase tracking-[0.18em] text-neutral-400">
             Connect with us

@@ -37,7 +37,7 @@ export default function Home() {
     name: SITE_CONFIG.name,
     url: SITE_CONFIG.website,
     hasMap: SITE_CONFIG.mapLink,
-    image: `${SITE_CONFIG.website}/images/studio-hero.webp`,
+    image: `${SITE_CONFIG.website}/images/black-humor-productions-storefront.jpg`,
     telephone: SITE_CONFIG.phone,
     email: SITE_CONFIG.email,
     address: {
@@ -55,11 +55,11 @@ export default function Home() {
   return (
     <>
       <Helmet>
-        <link rel="preload" as="image" href="/images/studio-hero.webp" />
+        <link rel="preload" as="image" href="/images/black-humor-productions-storefront.jpg" />
         <title>Creative Media & Digital Studio in Kerala | {SITE_CONFIG.name}</title>
         <meta
           name="description"
-          content="Ideas that get noticed. Black Humor Productions is a creative media studio in Nooranad, Kerala, for video, photography, digital marketing and brand design."
+          content="We create engaging content, powerful brands and meaningful experiences through strategy, creativity and technology."
         />
         <meta property="og:title" content={`${SITE_CONFIG.name} — Ideas That Get Noticed`} />
         <meta
@@ -67,76 +67,69 @@ export default function Home() {
           content="Creative production, digital campaigns and brand storytelling from Nooranad, Kerala."
         />
         <meta property="og:url" content={SITE_CONFIG.website} />
-        <meta property="og:image" content={`${SITE_CONFIG.website}/images/studio-hero.webp`} />
+        <meta
+          property="og:image"
+          content={`${SITE_CONFIG.website}/images/black-humor-productions-storefront.jpg`}
+        />
         <script type="application/ld+json">{JSON.stringify(structuredData)}</script>
       </Helmet>
 
       <section className="relative isolate overflow-hidden border-b border-white/[0.08]">
-        <div className="absolute inset-0 -z-20 bg-brand-dark" />
-        <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_24%_45%,rgba(231,68,80,0.12),transparent_44%)]" />
-        <div className="mx-auto grid min-h-[calc(100svh-76px)] max-w-7xl items-center gap-10 px-5 py-14 sm:px-8 sm:py-16 lg:grid-cols-[1.05fr_0.95fr] lg:gap-12 lg:px-12 lg:py-20">
-          <div className="relative z-10 max-w-3xl">
+        <div className="absolute inset-0 -z-10 bg-brand-dark" />
+        <div className="mx-auto grid min-h-[calc(100svh-77px)] max-w-[1440px] items-center gap-10 px-5 py-12 sm:min-h-[calc(100svh-89px)] sm:px-8 sm:py-16 lg:grid-cols-[0.92fr_1.08fr] lg:gap-12 lg:px-10 lg:py-16 xl:px-12">
+          <div className="relative z-10 max-w-2xl">
             <p className="mb-6 inline-flex items-center gap-3 text-[10px] font-bold uppercase tracking-[0.2em] text-neutral-300 sm:text-xs">
               <span className="h-px w-8 bg-brand-gold" />
               Independent creative studio · Kerala
             </p>
-            <h1 className="font-display text-[clamp(2.8rem,7.2vw,6rem)] font-extrabold leading-[1.02] tracking-[-0.065em] text-white">
+            <h1 className="font-display text-[clamp(2.65rem,5.2vw,5.2rem)] font-extrabold leading-[1.02] tracking-[-0.065em] text-white">
               Ideas That Get Noticed.
-              <span className="mt-2 block text-brand-red">Stories That Make an Impact.</span>
+              <span className="mt-2 block text-brand-red">Stories That Make An Impact.</span>
             </h1>
             <p className="mt-6 max-w-xl text-base leading-7 text-neutral-400 sm:mt-7 sm:text-lg sm:leading-8">
-              We bring thoughtful strategy and considered production together to help brands tell
-              stories that stay with people.
+              We create engaging content, powerful brands and meaningful experiences through
+              strategy, creativity and technology.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
               <Link
                 to="/contact"
-                className="inline-flex min-h-14 items-center justify-center gap-3 rounded-full bg-brand-button px-7 text-sm font-bold text-white transition hover:bg-brand-button-hover focus-visible:outline-offset-4"
+                className="inline-flex min-h-14 items-center justify-center gap-3 rounded-full bg-brand-button px-7 text-xs font-bold uppercase tracking-[0.1em] text-white transition hover:bg-brand-button-hover focus-visible:outline-offset-4"
               >
                 Start a Project <ArrowRight size={17} aria-hidden="true" />
               </Link>
               <Link
                 to="/work"
-                className="inline-flex min-h-14 items-center justify-center gap-3 rounded-full border border-white/20 px-7 text-sm font-semibold text-white transition hover:border-white/45 hover:bg-white/[0.04]"
+                className="inline-flex min-h-14 items-center justify-center gap-3 rounded-full border border-white/20 px-7 text-xs font-semibold uppercase tracking-[0.1em] text-white transition hover:border-white/45 hover:bg-white/[0.04]"
               >
                 Explore Our Work <ArrowUpRight size={16} aria-hidden="true" />
               </Link>
             </div>
-            <div className="mt-10 flex items-center gap-3 text-xs font-medium text-neutral-500">
+            <div className="mt-8 flex items-center gap-3 text-xs font-medium text-neutral-500 sm:mt-10">
               <MoveDown size={15} className="text-brand-gold" aria-hidden="true" />
               Made with intent in Nooranad, Kerala
             </div>
           </div>
 
-          <div className="relative mx-auto w-full max-w-[600px] lg:ml-auto">
-            <div className="absolute -inset-3 border border-white/[0.08] sm:-inset-5" aria-hidden="true" />
-            <div className="relative aspect-[4/4.4] overflow-hidden bg-brand-charcoal sm:aspect-[4/4.2] lg:aspect-[4/5]">
+          <div className="relative mx-auto w-full max-w-[760px] lg:ml-auto">
+            <div
+              className="absolute -inset-3 border border-white/[0.08] sm:-inset-4"
+              aria-hidden="true"
+            />
+            <div className="relative aspect-[16/10] overflow-hidden bg-brand-charcoal">
               <img
-                src="/images/studio-hero.webp"
-                alt="A photographer framing a shot on location"
-                width="1400"
-                height="1750"
+                src="/images/black-humor-productions-storefront.jpg"
+                alt="Black Humor Productions' warmly lit storefront, with the circular studio sign and red facade lighting."
+                width="1365"
+                height="768"
+                fetchPriority="high"
                 decoding="async"
-                className="h-full w-full object-cover"
+                className="h-full w-full object-cover object-center"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/5" />
-              <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-5 sm:p-7">
-                <div>
-                  <p className="mb-1 text-[9px] font-bold uppercase tracking-[0.18em] text-white/65">
-                    The craft behind the story
-                  </p>
-                  <p className="font-display text-lg font-bold text-white sm:text-xl">
-                    Made to move people.
-                  </p>
-                </div>
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/50 text-white">
-                  <ArrowUpRight size={17} aria-hidden="true" />
-                </span>
-              </div>
+              <div
+                className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/10 via-transparent to-transparent"
+                aria-hidden="true"
+              />
             </div>
-            <p className="mt-3 text-right text-[9px] uppercase tracking-[0.15em] text-neutral-600">
-              Studio atmosphere · illustrative photography
-            </p>
           </div>
         </div>
       </section>

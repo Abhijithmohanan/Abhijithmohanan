@@ -8,9 +8,25 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl px-5 py-12 sm:px-8 lg:px-12">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.3fr_0.8fr_1fr]">
           <div>
-            <Link to="/" className="inline-flex" aria-label="Black Humor Productions home">
-              <span className="font-display text-sm font-extrabold tracking-[0.09em] text-white">
-                BLACK HUMOR <span className="text-brand-red">PRODUCTIONS</span>
+            <Link
+              to="/"
+              className="inline-flex items-center gap-3"
+              aria-label="Black Humor Productions home"
+            >
+              <img
+                src="/images/black-humor-productions-logo.png"
+                alt=""
+                width="48"
+                height="48"
+                loading="lazy"
+                className="h-12 w-12 object-contain"
+              />
+              <span className="h-9 w-px bg-brand-red" aria-hidden="true" />
+              <span className="font-display font-extrabold tracking-[0.08em] text-white">
+                <span className="block text-sm">BLACK <span className="text-brand-red">HUMOR</span></span>
+                <span className="mt-1 block text-[9px] font-bold uppercase tracking-[0.25em] text-neutral-400">
+                  PRODUCTIONS
+                </span>
               </span>
             </Link>
             <p className="mt-4 max-w-xs text-sm leading-6 text-neutral-400">
