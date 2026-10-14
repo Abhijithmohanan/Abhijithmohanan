@@ -1,51 +1,118 @@
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
-import { useState } from 'react';
+
+const links = [
+  { name: 'Home', path: '/' },
+  { name: 'About', path: '/about' },
+  { name: 'Services', path: '/services' },
+  { name: 'Portfolio', path: '/work' },
+  { name: 'Contact', path: '/contact' },
+];
+
+const linkClass = ({ isActive }: { isActive: boolean }) =>
+  `text-sm font-semibold transition-colors hover:text-white focus-visible:outline-offset-4 ${
+    isActive ? 'text-white' : 'text-neutral-400'
+  }`;
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const links = [
-    { name: 'Home', path: '/' },
-    { name: 'About', path: '/about' },
-    { name: 'Services', path: '/services' },
-    { name: 'Our Work', path: '/work' },
-    { name: 'Contact', path: '/contact' },
-  ];
+  const location = useLocation();
+
+  useEffect(() => {
+    setIsOpen(false);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setIsOpen(false);
+    };
+
+    window.addEventListener('keydown', closeOnEscape);
+    return () => window.removeEventListener('keydown', closeOnEscape);
+  }, [isOpen]);
 
   return (
-    <nav className="fixed top-0 w-full z-50 bg-brand-dark/90 backdrop-blur-md border-b border-white/10 transition-all">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20">
-          <Link to="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 bg-brand-red flex items-center justify-center font-black text-white rounded">BHP</div>
-            <div className="leading-tight">
-              <span className="block font-black text-xl tracking-wide text-white group-hover:text-brand-red transition-colors">BLACK HUMOR</span>
-              <span className="block text-[10px] tracking-[0.2em] text-gray-400 uppercase">Productions</span>
-            </div>
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-brand-dark/90 backdrop-blur-xl">
+      <nav
+        aria-label="Main navigation"
+        className="mx-auto flex h-[76px] max-w-7xl items-center justify-between px-5 sm:px-8 lg:px-12"
+      >
+        <Link
+          to="/"
+          aria-label="Black Humor Productions home"
+          className="group flex items-center gap-3"
+        >
+          <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-brand-button text-sm font-extrabold tracking-tight text-white">
+            BHP
+          </span>
+          <span className="leading-none">
+            <span className="font-display text-[15px] font-extrabold tracking-[0.08em] text-white sm:text-base">
+              BLACK <span className="text-brand-red">HUMOR</span>
+            </span>
+            <span className="mt-1 inline-block text-[9px] font-bold uppercase tracking-[0.28em] text-neutral-400">
+              Productions
+            </span>
+          </span>
+        </Link>
+
+        <div className="hidden items-center gap-8 md:flex">
+          {links.map((link) => (
+            <NavLink
+              key={link.path}
+              to={link.path}
+              end={link.path === '/'}
+              className={linkClass}
+            >
+              {link.name}
+            </NavLink>
+          ))}
+        </div>
+
+        <div className="flex items-center gap-3">
+          <Link
+            to="/contact"
+            className="rounded-full bg-brand-button px-4 py-2.5 text-[10px] font-bold uppercase tracking-[0.12em] text-white transition hover:bg-brand-button-hover focus-visible:outline-offset-4 sm:px-5 sm:text-[11px]"
+          >
+            Start a project
           </Link>
-          <div className="hidden md:flex space-x-8">
-            {links.map((link) => (
-              <Link key={link.name} to={link.path} className="text-sm font-semibold text-gray-300 hover:text-brand-red transition-colors">
-                {link.name}
-              </Link>
-            ))}
-          </div>
-          <button className="md:hidden text-white" onClick={() => setIsOpen(!isOpen)} aria-label="Toggle Menu">
-            {isOpen ? <X size={28} /> : <Menu size={28} />}
+          <button
+            type="button"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-white transition hover:border-white/30 md:hidden"
+            onClick={() => setIsOpen((open) => !open)}
+            aria-label={isOpen ? 'Close navigation menu' : 'Open navigation menu'}
+            aria-expanded={isOpen}
+            aria-controls="mobile-navigation"
+          >
+            {isOpen ? <X size={20} aria-hidden="true" /> : <Menu size={20} aria-hidden="true" />}
           </button>
         </div>
-      </div>
+      </nav>
+
       {isOpen && (
-        <div className="md:hidden bg-brand-charcoal border-b border-white/10">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+        <div id="mobile-navigation" className="border-t border-white/10 bg-brand-dark md:hidden">
+          <div className="mx-auto max-w-7xl space-y-1 px-5 py-3 sm:px-8">
             {links.map((link) => (
-              <Link key={link.name} to={link.path} onClick={() => setIsOpen(false)} className="block px-3 py-2 text-base font-medium text-gray-300 hover:text-brand-red hover:bg-white/5 rounded-md">
+              <NavLink
+                key={link.path}
+                to={link.path}
+                end={link.path === '/'}
+                className={({ isActive }) =>
+                  `block rounded-lg px-4 py-3 text-sm font-medium transition ${
+                    isActive
+                      ? 'bg-white/[0.06] text-white'
+                      : 'text-neutral-300 hover:bg-white/[0.04] hover:text-white'
+                  }`
+                }
+              >
                 {link.name}
-              </Link>
+              </NavLink>
             ))}
           </div>
         </div>
       )}
-    </nav>
+    </header>
   );
 }

@@ -1,46 +1,111 @@
 import { Helmet } from 'react-helmet-async';
+import { ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import SectionHeading from '../components/SectionHeading';
 import { SITE_CONFIG } from '../config/site';
-import { Award, Target, Users } from 'lucide-react';
+
+const principles = [
+  {
+    number: '01',
+    title: 'Start with listening',
+    description:
+      'We take time to understand the people, place and purpose behind each brief before shaping the work.',
+  },
+  {
+    number: '02',
+    title: 'Make it with care',
+    description:
+      'From a first sketch to a final export, we bring considered creative choices to every detail.',
+  },
+  {
+    number: '03',
+    title: 'Keep it clear',
+    description:
+      'A straightforward process keeps the collaboration human and the creative direction focused.',
+  },
+];
 
 export default function About() {
   return (
-    <div className="w-full py-24">
+    <>
       <Helmet>
-        <title>About Us | {SITE_CONFIG.name}</title>
+        <title>About the Studio | {SITE_CONFIG.name}</title>
+        <meta
+          name="description"
+          content="Meet the creative thinking behind Black Humor Productions, an independent media studio in Nooranad, Kerala."
+        />
+        <meta property="og:title" content={`About the Studio | ${SITE_CONFIG.name}`} />
       </Helmet>
-      
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="max-w-3xl mx-auto text-center mb-20">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6">About <span className="text-brand-red">Us.</span></h1>
-          <p className="text-xl text-gray-400">We are a dedicated team of digital strategists, creators, and producers based in Kerala.</p>
-        </div>
-        
-        <div className="bg-brand-charcoal border border-white/10 rounded-3xl p-8 md:p-16 mb-20">
-          <h2 className="text-3xl font-bold text-white mb-6">Our Foundation</h2>
-          <p className="text-gray-400 text-lg mb-8 leading-relaxed">
-            {SITE_CONFIG.name} was established with a clear vision: to elevate brand storytelling through high-impact media production and strategic digital marketing. Operating out of our studio in {SITE_CONFIG.location}, we service clients looking to make a serious impact in the digital space.
-          </p>
-          <div className="bg-brand-dark border-l-4 border-brand-gold p-6 rounded-r-lg">
-            <p className="text-sm text-gray-300 italic flex items-center gap-3">
-              <Award className="text-brand-gold h-5 w-5" />
-              Historical Note: Our studio inauguration was officially honored by the presence of {SITE_CONFIG.inauguration}.
-            </p>
-          </div>
-        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="bg-brand-charcoal p-10 rounded-2xl border border-white/10">
-            <Target className="h-10 w-10 text-brand-red mb-6" />
-            <h3 className="text-2xl font-bold text-white mb-4">Our Mission</h3>
-            <p className="text-gray-400">To provide enterprise-grade creative and digital marketing solutions that drive measurable growth and establish market dominance for our partners.</p>
-          </div>
-          <div className="bg-brand-charcoal p-10 rounded-2xl border border-white/10">
-            <Users className="h-10 w-10 text-brand-red mb-6" />
-            <h3 className="text-2xl font-bold text-white mb-4">Our Approach</h3>
-            <p className="text-gray-400">We blend cinematic aesthetics with data-driven strategies, ensuring every piece of content not only looks premium but performs optimally.</p>
+      <section className="mx-auto max-w-7xl px-5 pb-16 pt-16 sm:px-8 sm:pb-20 sm:pt-20 lg:px-12 lg:pt-24">
+        <p className="mb-5 text-[11px] font-bold uppercase tracking-[0.2em] text-brand-gold">
+          About the studio
+        </p>
+        <h1 className="max-w-5xl font-display text-4xl font-extrabold leading-[1.08] tracking-[-0.055em] text-white sm:text-6xl lg:text-7xl">
+          Independent thinking. <span className="text-brand-red">Thoughtful making.</span>
+        </h1>
+        <p className="mt-6 max-w-2xl text-base leading-7 text-neutral-400 sm:text-lg sm:leading-8">
+          {SITE_CONFIG.name} is a creative media studio based in Nooranad, Kerala. We bring
+          production and digital services together to help ideas find their clearest expression.
+        </p>
+      </section>
+
+      <section className="mx-auto grid max-w-7xl gap-10 px-5 pb-20 sm:px-8 lg:grid-cols-[0.92fr_1.08fr] lg:gap-16 lg:px-12 lg:pb-28">
+        <div className="relative min-h-[340px] overflow-hidden bg-brand-charcoal sm:min-h-[480px]">
+          <img
+            src="/images/studio-hero.webp"
+            alt="A creative shoot taking shape outdoors"
+            width="1400"
+            height="1750"
+            loading="lazy"
+            decoding="async"
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/45 to-transparent" />
+          <p className="absolute bottom-5 left-5 text-[9px] font-bold uppercase tracking-[0.18em] text-white/80">
+            Based in Nooranad, Kerala
+          </p>
+        </div>
+        <div className="flex flex-col justify-center">
+          <SectionHeading eyebrow="Who we are" title="Good work starts with a real conversation." />
+          <p className="mt-6 text-sm leading-7 text-neutral-400 sm:text-base sm:leading-8">
+            There’s no one-size-fits-all story. We work from your goals and your audience to find
+            a creative approach that feels right for your brand—whether that means a social
+            campaign, a film, a podcast or a new visual identity.
+          </p>
+          <p className="mt-4 text-sm leading-7 text-neutral-400 sm:text-base sm:leading-8">
+            Our studio is rooted in Nooranad. Our focus is the work: useful ideas, careful
+            production and a collaborative process from first brief to final delivery.
+          </p>
+          <Link
+            to="/contact"
+            className="mt-8 inline-flex w-fit items-center gap-2 text-sm font-bold text-white transition hover:text-brand-red"
+          >
+            Tell us what you have in mind <ArrowRight size={16} aria-hidden="true" />
+          </Link>
+        </div>
+      </section>
+
+      <section className="border-y border-white/[0.08] bg-[#151517] py-20 sm:py-24">
+        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
+          <SectionHeading
+            eyebrow="How we think"
+            title="A few things we believe in."
+            description="The best creative relationships are built on trust, curiosity and care for the details."
+          />
+          <div className="mt-10 grid gap-x-10 sm:grid-cols-3">
+            {principles.map((principle) => (
+              <article key={principle.number} className="border-t border-white/15 py-6">
+                <p className="mb-8 text-xs font-semibold tracking-[0.15em] text-brand-gold">
+                  {principle.number}
+                </p>
+                <h2 className="font-display text-xl font-bold text-white">{principle.title}</h2>
+                <p className="mt-3 text-sm leading-6 text-neutral-400">{principle.description}</p>
+              </article>
+            ))}
           </div>
         </div>
-      </div>
-    </div>
+      </section>
+    </>
   );
 }

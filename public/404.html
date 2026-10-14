@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Page not found — Black Humor Productions</title>
+  </head>
+  <body>
+    <p>Taking you back to the site…</p>
+    <script>
+      const requestedPath = `${location.pathname}${location.search}${location.hash}`;
+      location.replace(`${location.protocol}//${location.host}/?__route=${encodeURIComponent(requestedPath)}`);
+    </script>
+    <noscript>
+      <a href="/">Return to the home page.</a>
+    </noscript>
+  </body>
+</html>

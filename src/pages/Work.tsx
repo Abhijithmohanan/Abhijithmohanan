@@ -1,24 +1,77 @@
+import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
+import ProjectCard from '../components/ProjectCard';
+import { PORTFOLIO_DEMOS, type PortfolioFilter } from '../config/portfolio';
 import { SITE_CONFIG } from '../config/site';
 
+const filters: PortfolioFilter[] = ['All', 'Film', 'Studio', 'Campaign'];
+
 export default function Work() {
+  const [activeFilter, setActiveFilter] = useState<PortfolioFilter>('All');
+  const projects = PORTFOLIO_DEMOS.filter(
+    (project) => activeFilter === 'All' || project.filter === activeFilter,
+  );
+
   return (
-    <div className="w-full py-24 min-h-[80vh]">
+    <>
       <Helmet>
-        <title>Our Work | {SITE_CONFIG.name}</title>
+        <title>Portfolio Concepts | {SITE_CONFIG.name}</title>
+        <meta
+          name="description"
+          content="Explore visual direction demonstrations from Black Humor Productions. These concept projects are not commissioned client work."
+        />
+        <meta property="og:title" content={`Portfolio Concepts | ${SITE_CONFIG.name}`} />
       </Helmet>
-      
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-20">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6">Our <span className="text-brand-red">Work.</span></h1>
-          <p className="text-xl text-gray-400 max-w-2xl">A showcase of our cinematic production and strategic marketing case studies.</p>
+
+      <section className="mx-auto max-w-7xl px-5 pb-12 pt-16 sm:px-8 sm:pb-14 sm:pt-20 lg:px-12 lg:pt-24">
+        <p className="mb-5 text-[11px] font-bold uppercase tracking-[0.2em] text-brand-gold">
+          Portfolio
+        </p>
+        <h1 className="max-w-4xl font-display text-4xl font-extrabold leading-[1.08] tracking-[-0.055em] text-white sm:text-6xl lg:text-7xl">
+          A feel for <span className="text-brand-red">what’s possible.</span>
+        </h1>
+        <p className="mt-6 max-w-2xl text-base leading-7 text-neutral-400 sm:text-lg sm:leading-8">
+          These visual direction exercises demonstrate the kinds of stories we can create. They
+          are concepts—not client projects, commissioned work or case studies.
+        </p>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-5 pb-20 sm:px-8 lg:px-12 lg:pb-28">
+        <div className="mb-8 flex flex-wrap gap-2" role="group" aria-label="Filter concepts by type">
+          {filters.map((filter) => {
+            const isActive = filter === activeFilter;
+            return (
+              <button
+                key={filter}
+                type="button"
+                aria-pressed={isActive}
+                onClick={() => setActiveFilter(filter)}
+                className={`min-h-10 rounded-full border px-4 text-xs font-semibold transition ${
+                  isActive
+                    ? 'border-brand-button bg-brand-button text-white'
+                    : 'border-white/15 text-neutral-400 hover:border-white/35 hover:text-white'
+                }`}
+              >
+                {filter}
+              </button>
+            );
+          })}
         </div>
 
-        <div className="bg-brand-charcoal border border-white/10 border-dashed rounded-3xl p-16 text-center">
-          <p className="text-gray-400 text-lg mb-4">Portfolio assets are currently being updated.</p>
-          <p className="text-gray-500 text-sm">Please contact us directly for specific case studies and demonstration projects.</p>
+        <p className="sr-only" aria-live="polite">
+          Showing {projects.length} {activeFilter === 'All' ? '' : `${activeFilter} `}concept
+          {projects.length === 1 ? '' : 's'}.
+        </p>
+        <div className="grid gap-x-7 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+          {projects.map((project) => (
+            <ProjectCard key={project.id} {...project} />
+          ))}
         </div>
-      </div>
-    </div>
+        <p className="mt-10 border-l-2 border-brand-gold/70 pl-4 text-xs leading-6 text-neutral-500">
+          All featured images are illustrative demonstration material. No clients, business
+          results or completed projects are implied.
+        </p>
+      </section>
+    </>
   );
 }

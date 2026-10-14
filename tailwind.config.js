@@ -8,14 +8,17 @@ export default {
     extend: {
       colors: {
         brand: {
-          red: '#e11d48',
-          gold: '#f59e0b',
-          dark: '#0a0a0a',
-          charcoal: '#18181b',
+          red: '#e74450',
+          button: '#c83243',
+          'button-hover': '#ad2b3b',
+          gold: '#c9a452',
+          dark: '#101011',
+          charcoal: '#19191b',
         }
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        sans: ['DM Sans', 'system-ui', 'sans-serif'],
+        display: ['Manrope', 'DM Sans', 'system-ui', 'sans-serif'],
       }
     },
   },
