@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import { Instagram, Menu, X, Youtube } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { SITE_CONFIG } from '../config/site';
 
 const links = [
@@ -76,18 +76,18 @@ export default function Navbar() {
               target="_blank"
               rel="noreferrer"
               aria-label="Instagram (opens in a new tab)"
-              className="text-neutral-400 transition-colors hover:text-white focus-visible:outline-offset-4"
+              className="text-neutral-400 transition-colors hover:text-[#e1306c] focus-visible:outline-offset-4"
             >
-              <Instagram size={18} aria-hidden="true" />
+              <InstagramMark className="h-[18px] w-[18px]" />
             </a>
             <a
               href={SITE_CONFIG.youtubeLink}
               target="_blank"
               rel="noreferrer"
               aria-label="YouTube (opens in a new tab)"
-              className="text-neutral-400 transition-colors hover:text-white focus-visible:outline-offset-4"
+              className="text-neutral-400 transition-colors hover:text-[#ff0033] focus-visible:outline-offset-4"
             >
-              <Youtube size={19} aria-hidden="true" />
+              <YouTubeMark className="h-[19px] w-[19px]" />
             </a>
           </div>
           <Link
@@ -133,9 +133,9 @@ export default function Navbar() {
                 href={SITE_CONFIG.instagramLink}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 py-2 text-sm font-medium text-neutral-300 transition hover:text-white"
+                className="inline-flex min-h-10 items-center gap-2 py-2 text-sm font-medium text-neutral-300 transition hover:text-[#e1306c]"
               >
-                <Instagram size={17} aria-hidden="true" />
+                <InstagramMark className="h-[18px] w-[18px] shrink-0" />
                 Instagram
                 <span className="sr-only">(opens in a new tab)</span>
               </a>
@@ -143,9 +143,9 @@ export default function Navbar() {
                 href={SITE_CONFIG.youtubeLink}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 py-2 text-sm font-medium text-neutral-300 transition hover:text-white"
+                className="inline-flex min-h-10 items-center gap-2 py-2 text-sm font-medium text-neutral-300 transition hover:text-[#ff0033]"
               >
-                <Youtube size={18} aria-hidden="true" />
+                <YouTubeMark className="h-[19px] w-[19px] shrink-0" />
                 YouTube
                 <span className="sr-only">(opens in a new tab)</span>
               </a>
@@ -154,5 +154,37 @@ export default function Navbar() {
         </div>
       )}
     </header>
+  );
+}
+
+function InstagramMark({ className }: { className: string }) {
+  return (
+    <svg
+      aria-hidden="true"
+      className={className}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <rect x="3" y="3" width="18" height="18" rx="5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="17.5" cy="6.5" r="0.75" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+function YouTubeMark({ className }: { className: string }) {
+  return (
+    <svg
+      aria-hidden="true"
+      className={className}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+    >
+      <path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.2 3.6-6.2 3.6Z" />
+    </svg>
   );
 }
