@@ -205,24 +205,6 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="border-t border-white/[0.08] bg-[#151517] py-16 sm:py-20">
-        <div className="mx-auto flex max-w-7xl flex-col gap-7 px-5 sm:px-8 md:flex-row md:items-center md:justify-between lg:px-12">
-          <div>
-            <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.2em] text-brand-gold">
-              Have a story to tell?
-            </p>
-            <h2 className="font-display text-3xl font-bold tracking-[-0.04em] text-white sm:text-4xl">
-              Let’s make something matter.
-            </h2>
-          </div>
-          <Link
-            to="/contact"
-            className="inline-flex min-h-[52px] w-fit items-center justify-center gap-3 rounded-full bg-brand-button px-7 py-4 text-sm font-bold text-white transition hover:bg-brand-button-hover"
-          >
-            Start a Project <ArrowRight size={17} aria-hidden="true" />
-          </Link>
-        </div>
-      </section>
     </>
   );
 }
