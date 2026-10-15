@@ -33,7 +33,7 @@ export default function Services() {
       <section className="border-y border-white/[0.08] bg-[#151517]">
         <div className="mx-auto max-w-7xl px-5 py-10 sm:px-8 sm:py-14 lg:px-12">
           <div className="grid gap-x-9 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-12">
-            {SITE_CONFIG.services.map((service, index) => (
+            {SITE_CONFIG.services.slice(0, 6).map((service, index) => (
               <ServiceCard key={service.id} service={service} index={index} />
             ))}
           </div>

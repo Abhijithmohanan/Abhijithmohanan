@@ -94,7 +94,7 @@ export default function Footer() {
             <p className="text-neutral-500">Nooranad, Kerala, India.</p>
           </div>
           {socialLinks.length > 0 && (
-            <nav aria-label="Social media" className="flex items-center gap-3">
+            <nav aria-label="Social media" className="flex items-center gap-3 md:mr-20">
               {socialLinks.map((link) => (
                 <a
                   key={link.name}

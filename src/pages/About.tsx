@@ -106,6 +106,44 @@ export default function About() {
           </div>
         </div>
       </section>
+
+      <section className="mx-auto grid max-w-7xl gap-8 px-5 py-16 sm:px-8 sm:py-20 md:grid-cols-2 lg:px-12 lg:py-24">
+        <article className="border-t border-brand-red/60 pt-6">
+          <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.18em] text-brand-gold">Our mission</p>
+          <h2 className="font-display text-2xl font-bold text-white sm:text-3xl">Make good ideas clear, compelling and ready to meet their audience.</h2>
+          <p className="mt-4 max-w-lg text-sm leading-7 text-neutral-400">
+            We bring strategy and craft together so each project has a thoughtful purpose, a distinct point of view and a useful way forward.
+          </p>
+        </article>
+        <article className="border-t border-white/20 pt-6">
+          <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.18em] text-brand-gold">Our vision</p>
+          <h2 className="font-display text-2xl font-bold text-white sm:text-3xl">A creative partner for stories that deserve to be noticed.</h2>
+          <p className="mt-4 max-w-lg text-sm leading-7 text-neutral-400">
+            We aim to make considered, collaborative creative work accessible to brands and people building what comes next.
+          </p>
+        </article>
+      </section>
+
+      <section className="border-t border-white/[0.08] bg-[#151517] py-16 sm:py-20">
+        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
+          <SectionHeading eyebrow="How we work" title="Curious by nature. Clear by design." description="A practical, collaborative approach keeps the work grounded in your goals and gives good ideas room to grow." />
+          <div className="mt-10 grid gap-4 sm:grid-cols-3">
+            {[
+              ['Curiosity', 'Ask better questions and stay open to the unexpected.'],
+              ['Craft', 'Give the details and the bigger picture equal care.'],
+              ['Collaboration', 'Keep decisions, expectations and communication clear.'],
+            ].map(([title, description]) => (
+              <article key={title} className="border border-white/10 p-5 sm:p-6">
+                <h3 className="font-display text-lg font-bold text-white">{title}</h3>
+                <p className="mt-2 text-sm leading-6 text-neutral-400">{description}</p>
+              </article>
+            ))}
+          </div>
+          <Link to="/contact" className="mt-9 inline-flex min-h-12 items-center gap-3 rounded-full bg-brand-button px-6 text-xs font-bold uppercase tracking-[0.1em] text-white transition hover:bg-brand-button-hover">
+            Start a project <ArrowRight size={16} aria-hidden="true" />
+          </Link>
+        </div>
+      </section>
     </>
   );
 }

@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { ArrowRight, ArrowUpRight, ChevronDown, Menu, Phone, X } from 'lucide-react';
 import { SITE_CONFIG } from '../config/site';
@@ -7,7 +7,7 @@ const links = [
   { name: 'Home', path: '/' },
   { name: 'About', path: '/about' },
   { name: 'Services', path: '/services' },
-  { name: 'Portfolio', path: '/work' },
+  { name: 'Portfolio', path: '/portfolio' },
   { name: 'Contact', path: '/contact' },
 ];
 
@@ -78,27 +78,6 @@ export default function Navbar() {
         </div>
 
         <div className="ml-auto flex shrink-0 items-center gap-2 sm:gap-3 xl:ml-0">
-          <div className="hidden items-center gap-0.5 2xl:gap-1 xl:flex">
-            <HeaderIconLink
-              href={SITE_CONFIG.instagramLink}
-              label="Instagram"
-              newTab
-            >
-              <InstagramMark className="h-[19px] w-[19px]" />
-            </HeaderIconLink>
-            <HeaderIconLink href={SITE_CONFIG.youtubeLink} label="YouTube" newTab>
-              <YouTubeMark className="h-5 w-5" />
-            </HeaderIconLink>
-            <HeaderIconLink href={SITE_CONFIG.whatsappLink} label="WhatsApp" newTab>
-              <WhatsAppMark className="h-[19px] w-[19px]" />
-            </HeaderIconLink>
-            <HeaderIconLink href={`tel:${SITE_CONFIG.phoneHref}`} label="Call us">
-              <Phone size={18} strokeWidth={1.8} aria-hidden="true" />
-            </HeaderIconLink>
-            <HeaderIconLink href={SITE_CONFIG.mapLink} label="Our location" newTab>
-              <GoogleMapsMark className="h-[19px] w-[19px]" />
-            </HeaderIconLink>
-          </div>
           <ConnectWithUs className="hidden xl:block" />
           <Link
             to="/contact"
@@ -153,31 +132,6 @@ export default function Navbar() {
         </div>
       )}
     </header>
-  );
-}
-
-function HeaderIconLink({
-  href,
-  label,
-  newTab = false,
-  children,
-}: {
-  href: string;
-  label: string;
-  newTab?: boolean;
-  children: ReactNode;
-}) {
-  return (
-    <a
-      href={href}
-      target={newTab ? '_blank' : undefined}
-      rel={newTab ? 'noreferrer' : undefined}
-      aria-label={newTab ? `${label} (opens in a new tab)` : label}
-      title={label}
-      className="flex h-9 w-8 items-center justify-center text-neutral-400 transition-colors hover:text-white focus-visible:outline-offset-2 2xl:w-9"
-    >
-      {children}
-    </a>
   );
 }
 

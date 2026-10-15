@@ -3,7 +3,6 @@ import {
   Camera,
   Clapperboard,
   Megaphone,
-  PenTool,
   Radio,
   Smartphone,
   type LucideIcon,
@@ -26,66 +25,69 @@ export const SITE_CONFIG = {
   services: [
     {
       id: 'social-media',
+      path: 'social-media-management',
       title: 'Social Media Management',
       description:
         'Channel planning and content calendars that keep your brand present and consistent.',
       icon: Smartphone,
       image: '/images/service-social-media.webp',
       imageAlt: 'Smartphone displaying a collection of social media apps.',
+      deliverables: ['Channel strategy', 'Editorial calendars', 'Community-ready content'],
     },
     {
       id: 'digital-marketing',
+      path: 'digital-marketing',
       title: 'Digital Marketing',
       description:
         'Strategy, content and measurement focused on the channels that matter.',
       icon: BarChart3,
       image: '/images/service-digital-marketing.webp',
       imageAlt: 'Laptop displaying digital analytics charts and performance data.',
+      deliverables: ['Channel planning', 'Campaign coordination', 'Performance reviews'],
     },
     {
       id: 'online-advertising',
+      path: 'online-advertising',
       title: 'Online Advertising Campaigns',
       description:
         'Audience-led campaigns with creative that earns attention and supports your goals.',
       icon: Megaphone,
       image: '/images/service-advertising.webp',
       imageAlt: 'A film projector casting a dramatic beam of light in a dark room.',
+      deliverables: ['Campaign concepts', 'Ad creative', 'Audience-led planning'],
     },
     {
       id: 'podcast-production',
+      path: 'podcast-production',
       title: 'Podcast Production',
       description:
         'Recording and post-production for thoughtful, studio-quality conversations.',
       icon: Radio,
       image: '/images/service-podcast.webp',
       imageAlt: 'Professional studio microphone and pop filter in a dark recording room.',
+      deliverables: ['Recording support', 'Episode editing', 'Platform-ready exports'],
     },
     {
       id: 'video-production',
+      path: 'video-production',
       title: 'Video Production & Editing',
       description:
         'From creative direction to final edit, for social, campaigns and brand stories.',
       icon: Clapperboard,
       image: '/images/service-video-production.webp',
       imageAlt: 'Video-editing timeline displayed on a production monitor.',
+      deliverables: ['Creative direction', 'Production planning', 'Editing and delivery'],
     },
     {
       id: 'creative-content',
+      path: 'creative-content',
       title: 'Creative Content Production',
       description:
         'Photography and short-form video designed to work together across your channels.',
       icon: Camera,
       image: '/images/service-content-production.webp',
       imageAlt: 'Professional camera ready for a photo and video shoot.',
-    },
-    {
-      id: 'brand-identity',
-      title: 'Brand Identity & Graphic Design',
-      description:
-        'Distinctive visual identities and practical design systems for brands building their next chapter.',
-      icon: PenTool,
-      image: '/images/service-brand-identity.webp',
-      imageAlt: 'Color palette, tablet and design tools arranged on a creative desk.',
+      deliverables: ['Photography', 'Short-form video', 'Channel-ready asset sets'],
     },
   ] satisfies Array<{
     id: string;
@@ -94,6 +96,8 @@ export const SITE_CONFIG = {
     icon: LucideIcon;
     image: string;
     imageAlt: string;
+    path: string;
+    deliverables: readonly string[];
   }>,
 } as const;
 

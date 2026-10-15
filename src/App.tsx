@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -8,6 +8,8 @@ import Services from './pages/Services';
 import Work from './pages/Work';
 import Contact from './pages/Contact';
 import NotFound from './pages/NotFound';
+import ServiceDetail from './pages/ServiceDetail';
+import PortfolioDetail from './pages/PortfolioDetail';
 
 function App() {
   return (
@@ -26,8 +28,10 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/about" element={<About />} />
               <Route path="/services" element={<Services />} />
-              <Route path="/work" element={<Work />} />
+              <Route path="/services/:servicePath" element={<ServiceDetail />} />
+              <Route path="/work" element={<Navigate to="/portfolio" replace />} />
               <Route path="/portfolio" element={<Work />} />
+              <Route path="/portfolio/:projectId" element={<PortfolioDetail />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="*" element={<NotFound />} />
             </Routes>

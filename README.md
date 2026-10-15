@@ -25,6 +25,10 @@ npm run preview
 
 The optimized static site is written to `dist/`. The build checks TypeScript before bundling.
 
+The site has separate routes for the home page, studio, services, six service detail pages,
+portfolio concepts and concept details, and project inquiries. Portfolio concepts are clearly
+identified as fictional demonstrations, not client case studies.
+
 ## Deploy to GitHub Pages
 
 The included `.github/workflows/deploy.yml` builds and publishes the site to GitHub Pages when changes are pushed to `main` (or when manually started from the Actions tab).

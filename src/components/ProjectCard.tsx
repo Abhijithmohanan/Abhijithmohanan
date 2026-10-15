@@ -2,6 +2,7 @@ import { ArrowUpRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 type ProjectCardProps = {
+  id: string;
   title: string;
   category: string;
   image: string;
@@ -10,6 +11,7 @@ type ProjectCardProps = {
 };
 
 export default function ProjectCard({
+  id,
   title,
   category,
   image,
@@ -43,8 +45,8 @@ export default function ProjectCard({
           <p className="mt-1 max-w-sm text-xs leading-5 text-neutral-300">{concept}</p>
         </div>
         <Link
-          to="/contact"
-          aria-label={`Discuss the ${title}`}
+          to={`/portfolio/${id}`}
+          aria-label={`Explore the ${title} demonstration concept`}
           className="mb-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-brand-red text-white transition-colors hover:bg-brand-red focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-brand-red"
         >
           <ArrowUpRight size={17} aria-hidden="true" />

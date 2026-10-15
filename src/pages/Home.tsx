@@ -1,5 +1,5 @@
 import { Helmet } from 'react-helmet-async';
-import { ArrowRight, ArrowUpRight, MoveDown } from 'lucide-react';
+import { ArrowRight, MoveDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import SectionHeading from '../components/SectionHeading';
 import ServiceCard from '../components/ServiceCard';
@@ -84,7 +84,7 @@ export default function Home() {
             </p>
             <h1 className="font-display text-[clamp(2.65rem,5.2vw,5.2rem)] font-extrabold leading-[1.02] tracking-[-0.065em] text-white">
               Ideas That Get Noticed.
-              <span className="mt-2 block text-brand-red">Stories That Make An Impact.</span>
+              <span className="mt-2 block text-brand-red">Stories That Make an Impact.</span>
             </h1>
             <p className="mt-6 max-w-xl text-base leading-7 text-neutral-400 sm:mt-7 sm:text-lg sm:leading-8">
               We create engaging content, powerful brands and meaningful experiences through
@@ -92,16 +92,16 @@ export default function Home() {
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
               <Link
-                to="/contact"
+                to="/services"
                 className="inline-flex min-h-14 items-center justify-center gap-3 rounded-full bg-brand-button px-7 text-xs font-bold uppercase tracking-[0.1em] text-white transition hover:bg-brand-button-hover focus-visible:outline-offset-4"
               >
-                Start a Project <ArrowRight size={17} aria-hidden="true" />
+                Explore Our Services <ArrowRight size={17} aria-hidden="true" />
               </Link>
               <Link
-                to="/work"
+                to="/contact"
                 className="inline-flex min-h-14 items-center justify-center gap-3 rounded-full border border-white/20 px-7 text-xs font-semibold uppercase tracking-[0.1em] text-white transition hover:border-white/45 hover:bg-white/[0.04]"
               >
-                Explore Our Work <ArrowUpRight size={16} aria-hidden="true" />
+                Start a Project <ArrowRight size={16} aria-hidden="true" />
               </Link>
             </div>
             <div className="mt-8 flex items-center gap-3 text-xs font-medium text-neutral-500 sm:mt-10">
@@ -182,7 +182,7 @@ export default function Home() {
               </p>
             </div>
             <Link
-              to="/work"
+              to="/portfolio"
               className="inline-flex min-h-10 w-fit items-center gap-2 rounded-full border border-brand-red/70 px-4 text-[10px] font-bold uppercase tracking-[0.12em] text-white transition hover:bg-brand-red focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-brand-red"
             >
               View all concepts <ArrowRight size={14} aria-hidden="true" />
@@ -219,6 +219,24 @@ export default function Home() {
               </article>
             ))}
           </div>
+        </div>
+      </section>
+
+      <section className="relative isolate overflow-hidden border-y border-white/[0.08] bg-[#151517]">
+        <div aria-hidden="true" className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_78%_50%,rgba(176,18,34,0.18),transparent_42%)]" />
+        <div className="mx-auto flex max-w-7xl flex-col gap-7 px-5 py-16 sm:px-8 sm:py-20 md:flex-row md:items-end md:justify-between lg:px-12 lg:py-24">
+          <div className="max-w-3xl">
+            <p className="mb-4 text-[10px] font-bold uppercase tracking-[0.2em] text-brand-gold">Black Humor Productions</p>
+            <h2 className="font-display text-3xl font-extrabold leading-tight tracking-[-0.05em] text-white sm:text-5xl">
+              Make the next idea <span className="text-brand-red">impossible to ignore.</span>
+            </h2>
+            <p className="mt-4 max-w-2xl text-sm leading-7 text-neutral-400 sm:text-base">
+              Thoughtful creative, made with intention in Nooranad, Kerala.
+            </p>
+          </div>
+          <Link to="/contact" className="inline-flex min-h-12 w-fit items-center gap-3 rounded-full bg-brand-button px-6 text-xs font-bold uppercase tracking-[0.1em] text-white transition hover:bg-brand-button-hover">
+            Start a conversation <ArrowRight size={16} aria-hidden="true" />
+          </Link>
         </div>
       </section>
 

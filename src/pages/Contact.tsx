@@ -27,6 +27,7 @@ export default function Contact() {
     const name = String(formData.get('name') ?? '').trim();
     const contact = String(formData.get('contact') ?? '').trim();
     const service = String(formData.get('service') ?? '');
+    const budget = String(formData.get('budget') ?? '');
     const details = String(formData.get('details') ?? '').trim();
     const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact);
     const isPhone = /\d/.test(contact) && /^\+?[\d\s().-]{7,}$/.test(contact);
@@ -57,6 +58,7 @@ export default function Contact() {
       `I'm ${name}.`,
       `You can reach me at: ${contact}`,
       `I'm interested in: ${serviceTitle}`,
+      ...(budget ? [`Indicative budget: ${budget}`] : []),
       '',
       'Project details:',
       details,
@@ -236,7 +238,22 @@ export default function Contact() {
               </div>
 
               <div>
-                <label htmlFor="details" className="mb-2 block text-xs font-semibold text-neutral-300">
+                <label htmlFor="budget" className="mb-2 mt-5 block text-xs font-semibold text-neutral-300">
+                  Indicative budget <span className="font-normal text-neutral-500">(optional)</span>
+                </label>
+                <select
+                  id="budget"
+                  name="budget"
+                  className="min-h-12 w-full border border-white/10 bg-brand-dark px-4 py-3 text-sm text-neutral-200 focus:border-brand-gold focus:outline-none"
+                  defaultValue=""
+                >
+                  <option value="">Prefer to discuss</option>
+                  <option value="Under ₹25,000">Under ₹25,000</option>
+                  <option value="₹25,000–₹50,000">₹25,000–₹50,000</option>
+                  <option value="₹50,000–₹1,00,000">₹50,000–₹1,00,000</option>
+                  <option value="₹1,00,000+">₹1,00,000+</option>
+                </select>
+                <label htmlFor="details" className="mb-2 mt-5 block text-xs font-semibold text-neutral-300">
                   Project details
                 </label>
                 <textarea
