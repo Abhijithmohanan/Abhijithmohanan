@@ -1,11 +1,11 @@
 import {
+  BarChart3,
+  Camera,
   Clapperboard,
-  Fingerprint,
   Megaphone,
   PenTool,
   Radio,
-  Share2,
-  Video,
+  Smartphone,
   type LucideIcon,
 } from 'lucide-react';
 
@@ -28,43 +28,55 @@ export const SITE_CONFIG = {
       id: 'social-media',
       title: 'Social Media Management',
       description:
-        'Thoughtful channel planning, content calendars and day-to-day publishing that keep your brand present and consistent.',
-      icon: Share2,
+        'Channel planning and content calendars that keep your brand present and consistent.',
+      icon: Smartphone,
+      image: '/images/service-social-media.webp',
+      imageAlt: 'Smartphone displaying a collection of social media apps.',
     },
     {
       id: 'digital-marketing',
       title: 'Digital Marketing',
       description:
-        'A considered digital strategy that connects useful content, the right channels and clear campaign objectives.',
-      icon: Megaphone,
+        'Strategy, content and measurement focused on the channels that matter.',
+      icon: BarChart3,
+      image: '/images/service-digital-marketing.webp',
+      imageAlt: 'Laptop displaying digital analytics charts and performance data.',
     },
     {
       id: 'online-advertising',
       title: 'Online Advertising Campaigns',
       description:
-        'Creative campaign assets and audience-focused paid promotion, shaped around your brief and budget.',
-      icon: Fingerprint,
+        'Audience-led campaigns with creative that earns attention and supports your goals.',
+      icon: Megaphone,
+      image: '/images/service-advertising.webp',
+      imageAlt: 'A film projector casting a dramatic beam of light in a dark room.',
     },
     {
       id: 'podcast-production',
       title: 'Podcast Production',
       description:
-        'End-to-end podcast recording and post-production for conversations that sound as considered as they feel.',
+        'Recording and post-production for thoughtful, studio-quality conversations.',
       icon: Radio,
+      image: '/images/service-podcast.webp',
+      imageAlt: 'Professional studio microphone and pop filter in a dark recording room.',
     },
     {
       id: 'video-production',
       title: 'Video Production & Editing',
       description:
-        'From a clear creative direction to the final edit, we produce video for social, campaigns and brand stories.',
+        'From creative direction to final edit, for social, campaigns and brand stories.',
       icon: Clapperboard,
+      image: '/images/service-video-production.webp',
+      imageAlt: 'Video-editing timeline displayed on a production monitor.',
     },
     {
       id: 'creative-content',
       title: 'Creative Content Production',
       description:
-        'Photography, short-form video and campaign content made to feel coherent across your digital channels.',
-      icon: Video,
+        'Photography and short-form video designed to work together across your channels.',
+      icon: Camera,
+      image: '/images/service-content-production.webp',
+      imageAlt: 'Professional camera ready for a photo and video shoot.',
     },
     {
       id: 'brand-identity',
@@ -72,12 +84,16 @@ export const SITE_CONFIG = {
       description:
         'Distinctive visual identities and practical design systems for brands building their next chapter.',
       icon: PenTool,
+      image: '/images/service-brand-identity.webp',
+      imageAlt: 'Color palette, tablet and design tools arranged on a creative desk.',
     },
   ] satisfies Array<{
     id: string;
     title: string;
     description: string;
     icon: LucideIcon;
+    image: string;
+    imageAlt: string;
   }>,
 } as const;
 

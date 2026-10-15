@@ -134,21 +134,30 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="py-20 sm:py-24 lg:py-28">
+      <section className="py-16 sm:py-20 lg:py-24">
         <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
-          <div className="mb-10 flex flex-col justify-between gap-5 sm:mb-12 md:flex-row md:items-end">
-            <SectionHeading
-              eyebrow="What we do"
-              title="A creative partner, from first idea to final frame."
-            />
+          <div className="mb-8 grid gap-5 md:grid-cols-[1fr_0.8fr] md:items-end lg:mb-10 lg:grid-cols-[1.25fr_0.75fr_auto] lg:gap-8">
+            <div className="max-w-2xl">
+              <p className="mb-3 flex items-center gap-3 text-[10px] font-bold uppercase tracking-[0.2em] text-brand-gold">
+                <span aria-hidden="true" className="h-px w-8 bg-brand-gold" />
+                What we do
+              </p>
+              <h2 className="font-display text-3xl font-extrabold leading-[1.08] tracking-[-0.05em] text-white sm:text-4xl lg:text-[2.75rem]">
+                A creative partner,
+                <span className="block text-brand-red">from first idea to final frame.</span>
+              </h2>
+            </div>
+            <p className="max-w-sm text-sm leading-6 text-neutral-400 sm:text-base sm:leading-7">
+              Strategy, content and creativity that help your brand get seen, remembered and grow.
+            </p>
             <Link
               to="/services"
-              className="inline-flex w-fit items-center gap-2 pb-1 text-xs font-bold uppercase tracking-[0.12em] text-neutral-300 transition hover:text-white"
+              className="inline-flex min-h-10 w-fit items-center gap-2 rounded-full border border-brand-red/70 px-4 text-[10px] font-bold uppercase tracking-[0.12em] text-white transition hover:bg-brand-red focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-brand-red"
             >
-              All services <ArrowRight size={15} aria-hidden="true" />
+              All services <ArrowRight size={14} aria-hidden="true" />
             </Link>
           </div>
-          <div className="grid gap-x-8 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-12">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {SITE_CONFIG.services.slice(0, 6).map((service, index) => (
               <ServiceCard key={service.id} service={service} index={index} />
             ))}
@@ -156,22 +165,30 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="border-y border-white/[0.08] bg-[#151517] py-20 sm:py-24 lg:py-28">
+      <section className="border-y border-white/[0.08] bg-[#101011] py-16 sm:py-20 lg:py-24">
         <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
-          <div className="mb-10 flex flex-col justify-between gap-5 sm:mb-12 md:flex-row md:items-end">
-            <SectionHeading
-              eyebrow="Selected concepts"
-              title="A glimpse of the stories we could tell."
-              description="These are visual direction exercises—not commissioned client projects or a record of completed work."
-            />
+          <div className="mb-8 grid gap-5 md:grid-cols-[1fr_auto] md:items-end lg:mb-10">
+            <div className="max-w-3xl">
+              <p className="mb-3 flex items-center gap-3 text-[10px] font-bold uppercase tracking-[0.2em] text-brand-gold">
+                <span aria-hidden="true" className="h-px w-8 bg-brand-gold" />
+                Selected concepts
+              </p>
+              <h2 className="font-display text-3xl font-extrabold leading-[1.08] tracking-[-0.05em] text-white sm:text-4xl lg:text-[2.75rem]">
+                A glimpse of the <span className="text-brand-red">stories we could tell.</span>
+              </h2>
+              <p className="mt-3 max-w-2xl text-sm leading-6 text-neutral-400 sm:text-base sm:leading-7">
+                These are visual direction exercises—not commissioned client projects or a record
+                of completed work.
+              </p>
+            </div>
             <Link
               to="/work"
-              className="inline-flex w-fit items-center gap-2 pb-1 text-xs font-bold uppercase tracking-[0.12em] text-neutral-300 transition hover:text-white"
+              className="inline-flex min-h-10 w-fit items-center gap-2 rounded-full border border-brand-red/70 px-4 text-[10px] font-bold uppercase tracking-[0.12em] text-white transition hover:bg-brand-red focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-brand-red"
             >
-              View all concepts <ArrowRight size={15} aria-hidden="true" />
+              View all concepts <ArrowRight size={14} aria-hidden="true" />
             </Link>
           </div>
-          <div className="grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {PORTFOLIO_DEMOS.slice(0, 3).map((project) => (
               <ProjectCard key={project.id} {...project} />
             ))}
