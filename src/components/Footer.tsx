@@ -26,8 +26,8 @@ export default function Footer() {
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_74%_48%,rgba(176,18,34,0.16),transparent_34%),linear-gradient(110deg,#080809_0%,#0b0b0c_55%,#080809_100%)]"
         />
-        <div className="mx-auto grid max-w-[1600px] items-center gap-8 px-5 py-12 sm:px-8 sm:py-14 lg:grid-cols-2 lg:gap-10 lg:px-12 lg:py-16">
-          <div className="relative z-10 flex items-center gap-5 sm:gap-7">
+        <div className="grid items-center lg:grid-cols-2">
+          <div className="relative z-10 flex items-center gap-5 px-5 py-12 sm:gap-7 sm:px-8 sm:py-14 lg:px-[clamp(3rem,7vw,7rem)] lg:py-16">
             <Link
               to="/"
               aria-label="Black Humor Productions home"
@@ -59,7 +59,7 @@ export default function Footer() {
             </div>
           </div>
 
-          <div className="relative isolate flex min-h-[260px] items-center overflow-hidden sm:min-h-[320px] lg:min-h-[390px]">
+          <div className="relative isolate flex min-h-[280px] items-center overflow-hidden sm:min-h-[340px] lg:min-h-[420px]">
             <img
               src="/images/black-humor-productions-footer-camera.jpg"
               alt="Cinema camera in a red-lit production studio"
@@ -67,11 +67,11 @@ export default function Footer() {
               height="640"
               loading="lazy"
               decoding="async"
-              className="absolute inset-0 z-0 h-full w-full object-cover object-[72%_50%] brightness-110 contrast-110"
+              className="absolute inset-0 z-0 h-full w-full object-cover object-[76%_50%] brightness-110 contrast-110"
             />
             <div
               aria-hidden="true"
-              className="absolute inset-0 z-10 bg-[linear-gradient(90deg,#080809_0%,rgba(8,8,9,0.88)_10%,rgba(8,8,9,0.42)_34%,rgba(8,8,9,0.04)_74%),linear-gradient(0deg,rgba(8,8,9,0.38),transparent_42%,rgba(8,8,9,0.12))]"
+              className="absolute inset-0 z-10 bg-[linear-gradient(90deg,#080809_0%,rgba(8,8,9,0.72)_18%,rgba(8,8,9,0.18)_43%,transparent_68%),linear-gradient(0deg,rgba(8,8,9,0.12),transparent_42%,rgba(8,8,9,0.08))]"
             />
             <div className="absolute inset-y-0 left-0 z-10 w-1/2 bg-[radial-gradient(ellipse_at_70%_48%,rgba(191,20,38,0.18),transparent_65%)]" />
             <div className="relative z-20 ml-3 border-l border-brand-red/80 py-1 pl-5 sm:ml-8 sm:pl-7">
