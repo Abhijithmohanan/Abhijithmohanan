@@ -6,77 +6,109 @@ const socialLinks = [
     name: 'Instagram',
     href: SITE_CONFIG.instagramLink,
     icon: <InstagramMark />,
-    hover: 'hover:text-[#e1306c]',
+    hover: 'hover:border-brand-red hover:text-white',
   },
   {
     name: 'YouTube',
     href: SITE_CONFIG.youtubeLink,
     icon: <YouTubeMark />,
-    hover: 'hover:text-[#ff0033]',
+    hover: 'hover:border-brand-red hover:text-white',
   },
 ].filter((link) => Boolean(link.href));
 
+const studioWords = ['IDEAS', 'STORIES', 'BRANDS', 'PEOPLE', 'IMPACT'];
+
 export default function Footer() {
   return (
-    <footer className="border-t border-white/[0.08] bg-[#0b0b0c]">
-      <div className="mx-auto max-w-7xl px-5 py-12 sm:px-8 sm:py-14 lg:px-12">
-        <div className="flex flex-col gap-10 md:flex-row md:items-end md:justify-between">
-          <div>
+    <footer className="overflow-hidden bg-[#080809] text-white">
+      <div className="relative isolate border-b border-white/15">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_74%_48%,rgba(176,18,34,0.16),transparent_34%),linear-gradient(110deg,#080809_0%,#0b0b0c_55%,#080809_100%)]"
+        />
+        <div className="mx-auto grid max-w-[1600px] items-center gap-10 px-5 py-14 sm:px-8 sm:py-16 lg:grid-cols-[1fr_1.05fr] lg:gap-12 lg:px-12 lg:py-20">
+          <div className="relative z-10 flex items-center gap-5 sm:gap-7">
             <Link
               to="/"
-              className="inline-flex items-center gap-3"
               aria-label="Black Humor Productions home"
+              className="shrink-0 rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-red"
             >
               <img
                 src="/images/black-humor-productions-logo.png"
-                alt=""
-                width="48"
-                height="48"
+                alt="Black Humor Productions circular logo"
+                width="112"
+                height="112"
                 loading="lazy"
-                className="h-12 w-12 object-contain"
+                decoding="async"
+                className="h-[76px] w-[76px] object-contain sm:h-24 sm:w-24 lg:h-28 lg:w-28"
               />
-              <span className="h-9 w-px bg-brand-red" aria-hidden="true" />
-              <span className="font-display font-extrabold tracking-[0.08em] text-white">
-                <span className="block text-sm">
-                  BLACK <span className="text-brand-red">HUMOR</span>
-                </span>
-                <span className="mt-1 block text-[9px] font-bold uppercase tracking-[0.25em] text-neutral-400">
-                  PRODUCTIONS
-                </span>
-              </span>
             </Link>
-            <p className="mt-4 max-w-sm text-sm leading-6 text-neutral-400">
-              Independent creative studio. Bold ideas, meaningful stories.
-            </p>
+            <span className="h-28 w-px shrink-0 bg-brand-red sm:h-32" aria-hidden="true" />
+            <div className="min-w-0">
+              <p className="font-display text-[clamp(1.35rem,4vw,2.7rem)] font-extrabold leading-none tracking-[0.035em] text-white">
+                BLACK <span className="text-brand-red">HUMOR</span>
+              </p>
+              <p className="mt-2 text-[0.65rem] font-semibold uppercase tracking-[0.38em] text-neutral-300 sm:text-sm sm:tracking-[0.48em]">
+                PRODUCTIONS
+              </p>
+              <p className="mt-5 text-sm leading-6 text-neutral-400 sm:text-base sm:leading-7">
+                Independent creative studio.
+                <br />
+                Bold ideas, meaningful stories.
+              </p>
+            </div>
           </div>
 
-          <div className="flex flex-col gap-5 md:items-end">
-            <div className="space-y-2 text-sm text-neutral-400 md:text-right">
-              <p>Made with intention.</p>
-              <p>Nooranad, Kerala, India.</p>
+          <div className="relative isolate flex min-h-[230px] items-center overflow-hidden sm:min-h-[280px] lg:min-h-[340px]">
+            <img
+              src="/images/black-humor-productions-footer-camera.jpg"
+              alt="Cinema camera in a red-lit production studio"
+              width="1800"
+              height="640"
+              loading="lazy"
+              decoding="async"
+              className="absolute inset-0 -z-20 h-full w-full object-cover object-[67%_50%] opacity-75"
+            />
+            <div
+              aria-hidden="true"
+              className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,#080809_0%,rgba(8,8,9,0.86)_18%,rgba(8,8,9,0.36)_58%,rgba(8,8,9,0.12)_100%),linear-gradient(0deg,rgba(8,8,9,0.66),transparent_54%,rgba(8,8,9,0.18))]"
+            />
+            <div className="absolute inset-y-0 left-0 w-1/2 -z-10 bg-[radial-gradient(ellipse_at_70%_48%,rgba(191,20,38,0.27),transparent_65%)]" />
+            <div className="ml-3 border-l border-brand-red/80 py-1 pl-5 sm:ml-8 sm:pl-7">
+              <ul className="space-y-2.5 text-[0.68rem] font-medium tracking-[0.3em] text-neutral-300/80 sm:space-y-3 sm:text-xs sm:tracking-[0.38em]">
+                {studioWords.map((word) => <li key={word}>{word}</li>)}
+              </ul>
+              <span className="mt-5 block h-px w-8 bg-brand-red sm:w-10" aria-hidden="true" />
             </div>
-            {socialLinks.length > 0 && (
-              <nav aria-label="Social media" className="flex items-center gap-2 md:justify-end">
-                {socialLinks.map((link) => (
-                  <a
-                    key={link.name}
-                    href={link.href}
-                    target="_blank"
-                    rel="noreferrer"
-                    aria-label={`${link.name} (opens in a new tab)`}
-                    className={`flex h-10 w-10 items-center justify-center text-neutral-400 transition-colors focus-visible:outline-offset-2 ${link.hover}`}
-                  >
-                    {link.icon}
-                  </a>
-                ))}
-              </nav>
-            )}
           </div>
         </div>
+      </div>
 
-        <div className="mt-10 flex flex-col gap-2 border-t border-white/[0.08] pt-5 text-xs text-neutral-500 sm:mt-12 sm:flex-row sm:items-center sm:justify-between">
-          <p>&copy; {new Date().getFullYear()} {SITE_CONFIG.name}.</p>
-          <p>Designed to stand out.</p>
+      <div className="mx-auto flex max-w-[1600px] flex-col gap-6 px-5 py-6 sm:px-8 sm:py-7 md:flex-row md:items-center md:justify-between lg:px-12">
+        <p className="text-xs leading-5 text-neutral-400 sm:text-sm">
+          &copy; {new Date().getFullYear()} {SITE_CONFIG.name}. All rights reserved.
+        </p>
+        <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:gap-7">
+          <div className="border-l border-white/20 pl-4 text-sm leading-6 sm:pl-5">
+            <p className="text-neutral-200">Made with intention.</p>
+            <p className="text-neutral-500">Nooranad, Kerala, India.</p>
+          </div>
+          {socialLinks.length > 0 && (
+            <nav aria-label="Social media" className="flex items-center gap-3">
+              {socialLinks.map((link) => (
+                <a
+                  key={link.name}
+                  href={link.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label={`${link.name} (opens in a new tab)`}
+                  className={`flex h-11 w-11 items-center justify-center rounded-full border border-brand-red/70 text-neutral-200 transition-colors motion-reduce:transition-none ${link.hover} focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-brand-red`}
+                >
+                  {link.icon}
+                </a>
+              ))}
+            </nav>
+          )}
         </div>
       </div>
     </footer>
