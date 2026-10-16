@@ -13,13 +13,16 @@ import {
 } from 'firebase/auth';
 import { Helmet } from 'react-helmet-async';
 import { ArrowRight, LockKeyhole } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { SITE_CONFIG } from '../config/site';
-import { auth, getDatabase, googleProvider } from '../config/firebase';
+import { auth, googleProvider } from '../config/firebase';
 import { assetUrl } from '../config/assets';
+import { useAuth } from '../contexts/AuthContext';
+import { ensureMemberProfile } from '../services/memberService';
 
 type AuthMode = 'login' | 'register';
 type Notice = { type: 'success' | 'error'; text: string };
+type AuthPageLocationState = { from?: { pathname?: string } };
 
 const authErrorMessages: Record<string, string> = {
   'auth/email-already-in-use': 'An account already uses this email. Try signing in instead.',
@@ -68,12 +71,36 @@ function getFirestoreErrorMessage(error: unknown) {
   return 'Firestore could not save your user profile. Please try again.';
 }
 
-export default function AuthPage({ mode }: { mode: AuthMode }) {
+export default function AuthPage({
+  mode,
+  adminEntry = false,
+}: {
+  mode: AuthMode;
+  adminEntry?: boolean;
+}) {
   const isRegister = mode === 'register';
+  const { user: authUser, isAdmin, isLoading: isCheckingSession } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
   const [user, setUser] = useState<User | null>(null);
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const [isBusy, setIsBusy] = useState(false);
   const [notice, setNotice] = useState<Notice | null>(null);
+
+  useEffect(() => {
+    if (isCheckingSession || !authUser) return;
+
+    if (adminEntry && !isAdmin) {
+      navigate('/access-denied', { replace: true });
+      return;
+    }
+
+    const destination = adminEntry
+      ? '/admin'
+      : (location.state as AuthPageLocationState | null)?.from?.pathname ??
+        (isAdmin ? '/admin' : '/dashboard');
+    navigate(destination, { replace: true });
+  }, [adminEntry, authUser, isAdmin, isCheckingSession, location.state, navigate]);
 
   useEffect(
     () =>
@@ -121,16 +148,18 @@ export default function AuthPage({ mode }: { mode: AuthMode }) {
         const credential = await createUserWithEmailAndPassword(auth, email, password);
         try {
           await updateProfile(credential.user, { displayName: fullName });
+          await ensureMemberProfile(credential.user);
         } catch (error) {
           setNotice({
             type: 'error',
-            text: `Your account was created, but we couldn't save your name. ${getAuthErrorMessage(error)}`,
+            text: `Your account was created, but its profile could not be saved. ${getFirestoreErrorMessage(error)}`,
           });
           return;
         }
         setNotice({ type: 'success', text: 'Your account is ready. You are now signed in.' });
       } else {
-        await signInWithEmailAndPassword(auth, email, password);
+        const credential = await signInWithEmailAndPassword(auth, email, password);
+        await ensureMemberProfile(credential.user);
         setNotice({ type: 'success', text: 'You are now signed in.' });
       }
     } catch (error) {
@@ -148,24 +177,14 @@ export default function AuthPage({ mode }: { mode: AuthMode }) {
       const result = await signInWithPopup(auth, googleProvider);
       const additionalInfo = getAdditionalUserInfo(result);
 
-      if (additionalInfo?.isNewUser) {
-        try {
-          const [{ doc, setDoc }, db] = await Promise.all([
-            import('firebase/firestore'),
-            getDatabase(),
-          ]);
-          await setDoc(doc(db, 'users', result.user.uid), {
-            uid: result.user.uid,
-            email: result.user.email ?? '',
-            displayName: result.user.displayName ?? '',
-          });
-        } catch (error) {
-          setNotice({
-            type: 'error',
-            text: `Your Google account was created and you are signed in, but we could not save your user record. ${getFirestoreErrorMessage(error)}`,
-          });
-          return;
-        }
+      try {
+        await ensureMemberProfile(result.user);
+      } catch (error) {
+        setNotice({
+          type: 'error',
+          text: `Your Google account${additionalInfo?.isNewUser ? ' was created' : ''} and you are signed in, but we could not save your user profile. ${getFirestoreErrorMessage(error)}`,
+        });
+        return;
       }
 
       setNotice({
@@ -252,11 +271,8 @@ export default function AuthPage({ mode }: { mode: AuthMode }) {
             </div>
           </div>
 
-          <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.2em] text-brand-gold">
-            Client access
-          </p>
           <h1 className="font-display text-3xl font-extrabold leading-tight tracking-[-0.05em] text-white">
-            {isRegister ? 'Create your account.' : 'Welcome back.'}
+            {isRegister ? 'Create your account.' : 'Login.'}
           </h1>
           <p className="mt-3 text-sm leading-6 text-neutral-400">
             {isRegister

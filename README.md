@@ -4,7 +4,7 @@ A responsive React website for Black Humor Productions, an independent creative 
 
 ## Requirements
 
-- Node.js 20.19+ or 22.12+
+- Node.js 24.12+
 - npm (included with Node.js)
 
 ## Run locally
@@ -28,6 +28,45 @@ The optimized static site is written to `dist/`. The build checks TypeScript bef
 The site has separate routes for the home page, studio, services, six service detail pages,
 portfolio concepts and concept details, and project inquiries. Portfolio concepts are clearly
 identified as fictional demonstrations, not client case studies.
+
+## Firebase membership portal
+
+The site uses Firebase Authentication and Cloud Firestore for member accounts, membership
+applications, review history, and the administrator console.
+
+1. In the Firebase project `blackhumorproductions-1774c`, enable Google sign-in and the email/password
+   provider under **Authentication → Sign-in method**. Add the production site and local development
+   hostnames to **Authentication → Settings → Authorized domains**.
+2. Create the Cloud Firestore database in production mode.
+3. Deploy the rules in this repository with the Firebase CLI:
+
+   ```bash
+   npx firebase-tools deploy --only firestore --project blackhumorproductions-1774c
+   ```
+
+4. Use the registration or Google sign-in button to create a member account. Members can submit and
+   track applications from the member console. Only a trusted administrator can access review tools.
+5. To grant or revoke administrator access, install the Admin SDK as a local-only tool and configure
+   Application Default Credentials for the Firebase project. Never commit a service-account key or
+   enter an administrator email into the website:
+
+   ```bash
+   npm install --no-save --package-lock=false firebase-admin
+   # Set GOOGLE_APPLICATION_CREDENTIALS to a securely stored service-account JSON file,
+   # or authenticate with `gcloud auth application-default login`.
+   node scripts/manage-admin.mjs grant FIREBASE_AUTH_UID
+   node scripts/manage-admin.mjs revoke FIREBASE_AUTH_UID
+   ```
+
+   Find a user's UID in **Authentication → Users**. The script accepts a Firebase Auth UID only,
+   preserves other custom claims, and updates both the `admin` custom claim and a server-managed
+   `adminUsers/{uid}` marker. Firestore rules require both, so deleting the marker during revocation
+   blocks admin data access immediately. After a grant, the user must refresh their sign-in session.
+   Keep the Admin SDK credentials private and use a trusted workstation.
+
+The Firebase web configuration in `src/config/firebase.ts` identifies the public client project; it
+does not grant administrator access. `firestore.rules` denies all access outside the explicit
+member/admin rules above. Deploy rule changes before enabling the portal for production users.
 
 ## Deploy to GitHub Pages
 

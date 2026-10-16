@@ -1,0 +1,122 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return signedIn()
+        && request.auth.token.admin == true
+        && exists(/databases/$(database)/documents/adminUsers/$(request.auth.uid));
+    }
+
+    function ownsUser(userId) {
+      return signedIn() && request.auth.uid == userId;
+    }
+
+    function validUserProfile(userId) {
+      return request.resource.data.keys().hasOnly([
+          'uid', 'email', 'displayName', 'photoURL', 'membershipStatus',
+          'createdAt', 'updatedAt'
+        ])
+        && request.resource.data.uid == userId
+        && request.resource.data.email is string
+        && request.resource.data.displayName is string
+        && request.resource.data.photoURL is string;
+    }
+
+    match /users/{userId} {
+      allow read: if ownsUser(userId) || isAdmin();
+      allow create: if (ownsUser(userId)
+          && validUserProfile(userId)
+          && request.resource.data.membershipStatus == 'Not Applied'
+          && request.resource.data.createdAt == request.time
+          && request.resource.data.updatedAt == request.time)
+        || (isAdmin() && validUserProfile(userId));
+      allow update: if isAdmin()
+        || (ownsUser(userId)
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+            'email', 'displayName', 'photoURL', 'updatedAt'
+          ])
+          && request.resource.data.uid == resource.data.uid
+          && request.resource.data.email == request.auth.token.email
+          && request.resource.data.updatedAt == request.time);
+      allow delete: if isAdmin();
+    }
+
+    match /membershipRequests/{requestId} {
+      allow read: if isAdmin()
+        || (signedIn() && resource.data.userId == request.auth.uid);
+      allow create: if signedIn()
+        && request.resource.data.keys().hasOnly([
+          'userId', 'applicantName', 'applicantEmail', 'phoneNumber',
+          'membershipType', 'reason', 'additionalInformation', 'status',
+          'adminRemarks', 'memberVisibleMessage', 'createdAt', 'updatedAt'
+        ])
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.applicantName is string
+        && request.resource.data.applicantName.size() > 0
+        && request.resource.data.applicantEmail == request.auth.token.email
+        && request.resource.data.phoneNumber is string
+        && request.resource.data.phoneNumber.size() >= 7
+        && request.resource.data.membershipType in [
+          'Individual', 'Student', 'Creator', 'Partner'
+        ]
+        && request.resource.data.reason is string
+        && request.resource.data.reason.size() > 0
+        && request.resource.data.additionalInformation is string
+        && request.resource.data.status == 'Pending'
+        && request.resource.data.adminRemarks == ''
+        && request.resource.data.memberVisibleMessage == ''
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.updatedAt == request.time;
+      allow update: if isAdmin()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'status', 'adminRemarks', 'memberVisibleMessage', 'updatedAt'
+        ])
+        && request.resource.data.status in [
+          'Pending', 'Under Review', 'Approved', 'Rejected', 'More Information Required'
+        ]
+        && request.resource.data.adminRemarks is string
+        && request.resource.data.memberVisibleMessage is string
+        && request.resource.data.updatedAt == request.time;
+      allow delete: if isAdmin();
+
+      match /history/{eventId} {
+        function parentRequest() {
+          return get(/databases/$(database)/documents/membershipRequests/$(requestId));
+        }
+
+        function parentRequestAfterWrite() {
+          return getAfter(/databases/$(database)/documents/membershipRequests/$(requestId));
+        }
+
+        allow read: if isAdmin()
+          || (signedIn() && parentRequest().data.userId == request.auth.uid);
+        allow create: if signedIn()
+          && request.resource.data.keys().hasOnly([
+            'previousStatus', 'newStatus', 'changedBy', 'timestamp', 'message'
+          ])
+          && request.resource.data.changedBy == request.auth.uid
+          && request.resource.data.timestamp == request.time
+          && request.resource.data.message is string
+          && ((isAdmin()
+              && request.resource.data.previousStatus == parentRequest().data.status
+              && request.resource.data.newStatus in [
+                'Pending', 'Under Review', 'Approved', 'Rejected', 'More Information Required'
+              ]
+              && request.resource.data.newStatus == parentRequestAfterWrite().data.status)
+            || (parentRequestAfterWrite().data.userId == request.auth.uid
+              && request.resource.data.previousStatus == ''
+              && request.resource.data.newStatus == 'Pending'
+              && parentRequestAfterWrite().data.status == 'Pending'));
+        allow update, delete: if isAdmin();
+      }
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
