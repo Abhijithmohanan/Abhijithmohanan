@@ -2,9 +2,11 @@ import { useEffect, useState, type FormEvent } from 'react';
 import { FirebaseError } from 'firebase/app';
 import {
   createUserWithEmailAndPassword,
+  getAdditionalUserInfo,
   onAuthStateChanged,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
+  signInWithPopup,
   signOut,
   updateProfile,
   type User,
@@ -13,7 +15,7 @@ import { Helmet } from 'react-helmet-async';
 import { ArrowRight, LockKeyhole } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { SITE_CONFIG } from '../config/site';
-import { auth } from '../config/firebase';
+import { auth, getDatabase, googleProvider } from '../config/firebase';
 import { assetUrl } from '../config/assets';
 
 type AuthMode = 'login' | 'register';
@@ -37,15 +39,33 @@ const authErrorMessages: Record<string, string> = {
   'auth/unauthorized-domain':
     'This site domain is not authorized in Firebase Authentication.',
   'auth/user-disabled': 'This account is disabled. Contact the studio for help.',
+  'auth/popup-closed-by-user': 'The Google sign-in window was closed before completion.',
+  'auth/popup-blocked': 'Your browser blocked the Google sign-in window. Allow pop-ups and try again.',
+  'auth/cancelled-popup-request': 'A Google sign-in window is already open.',
+  'auth/account-exists-with-different-credential':
+    'An account already exists with this email. Sign in using its original method.',
 };
 
 function getAuthErrorMessage(error: unknown) {
   if (error instanceof FirebaseError) {
     return (
-      authErrorMessages[error.code] ?? 'Firebase Authentication could not complete the request.'
+      authErrorMessages[error.code] ??
+      'Firebase could not complete the request. Please try again.'
     );
   }
   return 'Something went wrong. Please try again.';
+}
+
+function getFirestoreErrorMessage(error: unknown) {
+  if (error instanceof FirebaseError) {
+    if (error.code === 'permission-denied') {
+      return 'Firestore denied access to the users collection. Check your Firestore security rules.';
+    }
+    if (error.code === 'unavailable') {
+      return 'Firestore is temporarily unavailable. Please try again.';
+    }
+  }
+  return 'Firestore could not save your user profile. Please try again.';
 }
 
 export default function AuthPage({ mode }: { mode: AuthMode }) {
@@ -113,6 +133,47 @@ export default function AuthPage({ mode }: { mode: AuthMode }) {
         await signInWithEmailAndPassword(auth, email, password);
         setNotice({ type: 'success', text: 'You are now signed in.' });
       }
+    } catch (error) {
+      setNotice({ type: 'error', text: getAuthErrorMessage(error) });
+    } finally {
+      setIsBusy(false);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    setIsBusy(true);
+    setNotice(null);
+
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const additionalInfo = getAdditionalUserInfo(result);
+
+      if (additionalInfo?.isNewUser) {
+        try {
+          const [{ doc, setDoc }, db] = await Promise.all([
+            import('firebase/firestore'),
+            getDatabase(),
+          ]);
+          await setDoc(doc(db, 'users', result.user.uid), {
+            uid: result.user.uid,
+            email: result.user.email ?? '',
+            displayName: result.user.displayName ?? '',
+          });
+        } catch (error) {
+          setNotice({
+            type: 'error',
+            text: `Your Google account was created and you are signed in, but we could not save your user record. ${getFirestoreErrorMessage(error)}`,
+          });
+          return;
+        }
+      }
+
+      setNotice({
+        type: 'success',
+        text: additionalInfo?.isNewUser
+          ? 'Your account is ready. You are now signed in.'
+          : 'You are now signed in.',
+      });
     } catch (error) {
       setNotice({ type: 'error', text: getAuthErrorMessage(error) });
     } finally {
@@ -340,6 +401,22 @@ export default function AuthPage({ mode }: { mode: AuthMode }) {
                       : 'Sign in'}
                   {!isBusy && <ArrowRight size={16} aria-hidden="true" />}
                 </button>
+                <div className="flex items-center gap-3" aria-hidden="true">
+                  <span className="h-px flex-1 bg-white/10" />
+                  <span className="text-[10px] font-semibold uppercase tracking-[0.16em] text-neutral-500">
+                    or
+                  </span>
+                  <span className="h-px flex-1 bg-white/10" />
+                </div>
+                <button
+                  type="button"
+                  onClick={handleGoogleSignIn}
+                  disabled={isBusy}
+                  className="inline-flex min-h-12 w-full items-center justify-center gap-3 rounded-full border border-white/15 px-5 text-xs font-bold text-white transition hover:border-white/35 hover:bg-white/[0.04] focus-visible:outline-offset-4 disabled:cursor-wait disabled:opacity-60"
+                >
+                  <GoogleMark />
+                  Continue with Google
+                </button>
                 <Notice notice={notice} />
               </form>
 
@@ -358,6 +435,29 @@ export default function AuthPage({ mode }: { mode: AuthMode }) {
         </div>
       </section>
     </>
+  );
+}
+
+function GoogleMark() {
+  return (
+    <svg aria-hidden="true" className="h-4 w-4" viewBox="0 0 48 48">
+      <path
+        fill="#EA4335"
+        d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5Z"
+      />
+      <path
+        fill="#4285F4"
+        d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.74 7.18l7.72 6C44.42 38.08 46.98 31.84 46.98 24.55Z"
+      />
+      <path
+        fill="#FBBC05"
+        d="M10.53 28.59a14.4 14.4 0 0 1 0-9.18l-7.98-6.19a23.95 23.95 0 0 0 0 21.56l7.98-6.19Z"
+      />
+      <path
+        fill="#34A853"
+        d="M24 48c6.48 0 11.93-2.13 15.91-5.8l-7.72-6c-2.13 1.43-4.85 2.3-8.19 2.3-6.26 0-11.57-4.22-13.46-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48Z"
+      />
+    </svg>
   );
 }
 
