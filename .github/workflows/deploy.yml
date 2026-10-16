@@ -29,7 +29,7 @@ jobs:
       - name: Build website
         run: npm run build
       - name: Add custom domain
-        run: cp CNAME dist/CNAME
+        run: if [ -f CNAME ]; then cp CNAME dist/CNAME; fi
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
       - name: Upload Pages artifact
