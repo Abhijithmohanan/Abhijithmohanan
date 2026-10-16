@@ -14,6 +14,7 @@ import { ArrowRight, LockKeyhole } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { SITE_CONFIG } from '../config/site';
 import { auth } from '../config/firebase';
+import { assetUrl } from '../config/assets';
 
 type AuthMode = 'login' | 'register';
 type Notice = { type: 'success' | 'error'; text: string };
@@ -173,7 +174,7 @@ export default function AuthPage({ mode }: { mode: AuthMode }) {
         <div className="w-full max-w-[440px] border border-white/10 bg-[#151517] p-6 shadow-2xl shadow-black/20 sm:p-10">
           <div className="mb-8 flex items-center gap-3">
             <img
-              src="/images/black-humor-productions-logo.png"
+              src={assetUrl('images/black-humor-productions-logo.png')}
               alt=""
               width="48"
               height="48"

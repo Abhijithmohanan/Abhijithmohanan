@@ -2,6 +2,7 @@ import { useEffect, useId, useRef, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { ArrowRight, ArrowUpRight, ChevronDown, Menu, Phone, X } from 'lucide-react';
 import { SITE_CONFIG } from '../config/site';
+import { assetUrl } from '../config/assets';
 
 const links = [
   { name: 'Home', path: '/' },
@@ -47,7 +48,7 @@ export default function Navbar() {
           className="group flex shrink-0 items-center gap-2.5 max-[360px]:gap-1.5 sm:gap-3.5"
         >
           <img
-            src="/images/black-humor-productions-logo.png"
+            src={assetUrl('images/black-humor-productions-logo.png')}
             alt=""
             width="64"
             height="64"

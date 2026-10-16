@@ -7,6 +7,7 @@ import {
   Smartphone,
   type LucideIcon,
 } from 'lucide-react';
+import { assetUrl } from './assets';
 
 export const SITE_CONFIG = {
   name: 'Black Humor Productions',
@@ -30,7 +31,7 @@ export const SITE_CONFIG = {
       description:
         'Channel planning and content calendars that keep your brand present and consistent.',
       icon: Smartphone,
-      image: '/images/service-social-media.webp',
+      image: assetUrl('images/service-social-media.webp'),
       imageAlt: 'Smartphone displaying a collection of social media apps.',
       deliverables: ['Channel strategy', 'Editorial calendars', 'Community-ready content'],
     },
@@ -41,7 +42,7 @@ export const SITE_CONFIG = {
       description:
         'Strategy, content and measurement focused on the channels that matter.',
       icon: BarChart3,
-      image: '/images/service-digital-marketing.webp',
+      image: assetUrl('images/service-digital-marketing.webp'),
       imageAlt: 'Laptop displaying digital analytics charts and performance data.',
       deliverables: ['Channel planning', 'Campaign coordination', 'Performance reviews'],
     },
@@ -52,7 +53,7 @@ export const SITE_CONFIG = {
       description:
         'Audience-led campaigns with creative that earns attention and supports your goals.',
       icon: Megaphone,
-      image: '/images/service-advertising.webp',
+      image: assetUrl('images/service-advertising.webp'),
       imageAlt: 'A film projector casting a dramatic beam of light in a dark room.',
       deliverables: ['Campaign concepts', 'Ad creative', 'Audience-led planning'],
     },
@@ -63,7 +64,7 @@ export const SITE_CONFIG = {
       description:
         'Recording and post-production for thoughtful, studio-quality conversations.',
       icon: Radio,
-      image: '/images/service-podcast.webp',
+      image: assetUrl('images/service-podcast.webp'),
       imageAlt: 'Professional studio microphone and pop filter in a dark recording room.',
       deliverables: ['Recording support', 'Episode editing', 'Platform-ready exports'],
     },
@@ -74,7 +75,7 @@ export const SITE_CONFIG = {
       description:
         'From creative direction to final edit, for social, campaigns and brand stories.',
       icon: Clapperboard,
-      image: '/images/service-video-production.webp',
+      image: assetUrl('images/service-video-production.webp'),
       imageAlt: 'Video-editing timeline displayed on a production monitor.',
       deliverables: ['Creative direction', 'Production planning', 'Editing and delivery'],
     },
@@ -85,7 +86,7 @@ export const SITE_CONFIG = {
       description:
         'Photography and short-form video designed to work together across your channels.',
       icon: Camera,
-      image: '/images/service-content-production.webp',
+      image: assetUrl('images/service-content-production.webp'),
       imageAlt: 'Professional camera ready for a photo and video shoot.',
       deliverables: ['Photography', 'Short-form video', 'Channel-ready asset sets'],
     },

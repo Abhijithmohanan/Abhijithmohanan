@@ -18,9 +18,9 @@
       property="og:description"
       content="Ideas that get noticed. Creative production and digital services from Nooranad, Kerala."
     />
-    <meta property="og:image" content="/images/black-humor-productions-storefront.jpg" />
+    <meta property="og:image" content="%BASE_URL%images/black-humor-productions-storefront.jpg" />
     <meta name="twitter:card" content="summary_large_image" />
-    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="icon" type="image/png" href="%BASE_URL%favicon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -33,8 +33,9 @@
     <div id="root"></div>
     <script>
       const spaRedirect = new URLSearchParams(location.search).get('__route');
+      const basePath = '%BASE_URL%';
       if (spaRedirect && spaRedirect.startsWith('/') && !spaRedirect.startsWith('//')) {
-        history.replaceState(null, '', spaRedirect);
+        history.replaceState(null, '', `${basePath}${spaRedirect.slice(1)}`);
       }
     </script>
     <script type="module" src="/src/main.tsx"></script>

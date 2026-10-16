@@ -6,6 +6,7 @@ import ServiceCard from '../components/ServiceCard';
 import ProjectCard from '../components/ProjectCard';
 import { SITE_CONFIG } from '../config/site';
 import { PORTFOLIO_DEMOS } from '../config/portfolio';
+import { assetUrl } from '../config/assets';
 
 const processSteps = [
   {
@@ -55,7 +56,11 @@ export default function Home() {
   return (
     <>
       <Helmet>
-        <link rel="preload" as="image" href="/images/black-humor-productions-storefront.jpg" />
+        <link
+          rel="preload"
+          as="image"
+          href={assetUrl('images/black-humor-productions-storefront.jpg')}
+        />
         <title>Creative Media & Digital Studio in Kerala | {SITE_CONFIG.name}</title>
         <meta
           name="description"
@@ -117,7 +122,7 @@ export default function Home() {
             />
             <div className="relative aspect-[16/10] overflow-hidden bg-brand-charcoal">
               <img
-                src="/images/black-humor-productions-storefront.jpg"
+                src={assetUrl('images/black-humor-productions-storefront.jpg')}
                 alt="Black Humor Productions' warmly lit storefront, with the circular studio sign and red facade lighting."
                 width="1365"
                 height="768"

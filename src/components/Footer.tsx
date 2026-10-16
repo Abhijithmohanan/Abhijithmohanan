@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { SITE_CONFIG } from '../config/site';
+import { assetUrl } from '../config/assets';
 
 const socialLinks = [
   {
@@ -34,7 +35,7 @@ export default function Footer() {
               className="shrink-0 rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-red"
             >
               <img
-                src="/images/black-humor-productions-logo.png"
+                src={assetUrl('images/black-humor-productions-logo.png')}
                 alt="Black Humor Productions circular logo"
                 width="112"
                 height="112"
@@ -61,7 +62,7 @@ export default function Footer() {
 
           <div className="relative isolate flex min-h-[280px] items-center overflow-hidden sm:min-h-[340px] lg:min-h-[420px]">
             <img
-              src="/images/black-humor-productions-footer-camera.jpg"
+              src={assetUrl('images/black-humor-productions-footer-camera.jpg')}
               alt="Cinema camera in a red-lit production studio"
               width="1800"
               height="640"

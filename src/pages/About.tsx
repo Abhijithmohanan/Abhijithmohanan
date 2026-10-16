@@ -3,6 +3,7 @@ import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import SectionHeading from '../components/SectionHeading';
 import { SITE_CONFIG } from '../config/site';
+import { assetUrl } from '../config/assets';
 
 const principles = [
   {
@@ -53,7 +54,7 @@ export default function About() {
       <section className="mx-auto grid max-w-7xl gap-10 px-5 pb-20 sm:px-8 lg:grid-cols-[0.92fr_1.08fr] lg:gap-16 lg:px-12 lg:pb-28">
         <div className="relative min-h-[340px] overflow-hidden bg-brand-charcoal sm:min-h-[480px]">
           <img
-            src="/images/studio-hero.webp"
+            src={assetUrl('images/studio-hero.webp')}
             alt="A creative shoot taking shape outdoors"
             width="1400"
             height="1750"

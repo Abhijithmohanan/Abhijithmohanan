@@ -9,11 +9,16 @@
   <body>
     <p>Taking you back to the site…</p>
     <script>
-      const requestedPath = `${location.pathname}${location.search}${location.hash}`;
-      location.replace(`${location.protocol}//${location.host}/?__route=${encodeURIComponent(requestedPath)}`);
+      const basePath = '__BASE_PATH__';
+      const basePrefix = basePath === '/' ? '' : basePath.slice(0, -1);
+      const routePath = location.pathname.startsWith(`${basePrefix}/`)
+        ? location.pathname.slice(basePrefix.length)
+        : location.pathname;
+      const requestedPath = `${routePath}${location.search}${location.hash}`;
+      location.replace(`${basePath}?__route=${encodeURIComponent(requestedPath)}`);
     </script>
     <noscript>
-      <a href="/">Return to the home page.</a>
+      <a href="__BASE_PATH__">Return to the home page.</a>
     </noscript>
   </body>
 </html>

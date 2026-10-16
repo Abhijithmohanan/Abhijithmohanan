@@ -15,7 +15,7 @@ import AuthPage from './pages/AuthPage';
 function App() {
   return (
     <HelmetProvider>
-      <BrowserRouter>
+      <BrowserRouter basename={import.meta.env.BASE_URL}>
         <div className="flex min-h-screen flex-col">
           <a
             href="#main-content"
