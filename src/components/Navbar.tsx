@@ -83,8 +83,7 @@ export default function Navbar() {
             to="/login"
             className="inline-flex min-h-10 shrink-0 items-center justify-center rounded-full border border-white/15 px-3 text-[10px] font-bold uppercase tracking-[0.08em] text-white transition hover:border-white/35 hover:bg-white/[0.04] focus-visible:outline-offset-4 sm:min-h-11 sm:px-4 sm:text-[11px] sm:tracking-[0.1em]"
           >
-            <span className="sm:hidden">Login</span>
-            <span className="hidden sm:inline">Client login</span>
+            Login
           </Link>
           <Link
             to="/contact"
