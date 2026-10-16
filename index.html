@@ -32,9 +32,21 @@
   <body>
     <div id="root"></div>
     <script>
-      const spaRedirect = new URLSearchParams(location.search).get('__route');
+      let spaRedirect = new URLSearchParams(location.search).get('__route');
       const basePath = '%BASE_URL%';
-      if (spaRedirect && spaRedirect.startsWith('/') && !spaRedirect.startsWith('//')) {
+      for (let depth = 0; spaRedirect && depth < 256 && spaRedirect.includes('__BASE_PATH__'); depth += 1) {
+        const nestedQuery = spaRedirect.indexOf('?');
+        if (nestedQuery === -1) break;
+        const nestedRoute = new URLSearchParams(spaRedirect.slice(nestedQuery + 1)).get('__route');
+        if (!nestedRoute) break;
+        spaRedirect = nestedRoute;
+      }
+      if (
+        spaRedirect &&
+        spaRedirect.startsWith('/') &&
+        !spaRedirect.startsWith('//') &&
+        !spaRedirect.includes('__BASE_PATH__')
+      ) {
         history.replaceState(null, '', `${basePath}${spaRedirect.slice(1)}`);
       }
     </script>

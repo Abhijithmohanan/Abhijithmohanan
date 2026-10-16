@@ -82,6 +82,10 @@ The Vite build uses root-relative URLs for the configured custom domain. `public
 
 For another static host, publish the contents of `dist/`, configure its SPA fallback to serve `index.html` for application routes, and point the domain at that host.
 
+For Vercel, the included `vercel.json` rewrites application routes to `index.html`. This is
+separate from `public/404.html`, which is a GitHub Pages-specific fallback and must not be used
+to route requests on Vercel.
+
 ## Contact form
 
 The contact form validates its fields in the browser and prepares an inquiry in WhatsApp using the configured business number. The visitor reviews and sends the message themselves; no form data is sent to or stored by this website. Visitors can also email the studio directly at `blackhumorproductions@outlook.com` using the site's `mailto:` link.
