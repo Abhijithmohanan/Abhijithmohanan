@@ -10,6 +10,7 @@ import Contact from './pages/Contact';
 import NotFound from './pages/NotFound';
 import ServiceDetail from './pages/ServiceDetail';
 import PortfolioDetail from './pages/PortfolioDetail';
+import AuthPage from './pages/AuthPage';
 
 function App() {
   return (
@@ -33,6 +34,8 @@ function App() {
               <Route path="/portfolio" element={<Work />} />
               <Route path="/portfolio/:projectId" element={<PortfolioDetail />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/login" element={<AuthPage mode="login" />} />
+              <Route path="/register" element={<AuthPage mode="register" />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </main>

@@ -80,6 +80,12 @@ export default function Navbar() {
         <div className="ml-auto flex shrink-0 items-center gap-2 sm:gap-3 xl:ml-0">
           <ConnectWithUs className="hidden xl:block" />
           <Link
+            to="/login"
+            className="hidden min-h-11 items-center justify-center rounded-full border border-white/15 px-4 text-[10px] font-bold uppercase tracking-[0.1em] text-white transition hover:border-white/35 hover:bg-white/[0.04] focus-visible:outline-offset-4 xl:inline-flex"
+          >
+            Client login
+          </Link>
+          <Link
             to="/contact"
             className="hidden min-h-11 items-center justify-center gap-2 rounded-full bg-brand-button px-4 text-[10px] font-bold uppercase tracking-[0.1em] text-white transition hover:bg-brand-button-hover focus-visible:outline-offset-4 xl:inline-flex 2xl:px-5 2xl:text-[11px]"
           >
@@ -117,6 +123,13 @@ export default function Navbar() {
                 {link.name}
               </NavLink>
             ))}
+            <Link
+              to="/login"
+              onClick={() => setIsOpen(false)}
+              className="block rounded-lg px-4 py-3 text-sm font-medium text-neutral-300 transition hover:bg-white/[0.04] hover:text-white"
+            >
+              Client login
+            </Link>
             <ConnectWithUs
               className="mt-2 border-t border-white/10 px-4 pt-4"
               onSelect={() => setIsOpen(false)}
