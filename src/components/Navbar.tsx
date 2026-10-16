@@ -81,9 +81,10 @@ export default function Navbar() {
           <ConnectWithUs className="hidden xl:block" />
           <Link
             to="/login"
-            className="hidden min-h-11 items-center justify-center rounded-full border border-white/15 px-4 text-[10px] font-bold uppercase tracking-[0.1em] text-white transition hover:border-white/35 hover:bg-white/[0.04] focus-visible:outline-offset-4 xl:inline-flex"
+            className="inline-flex min-h-10 shrink-0 items-center justify-center rounded-full border border-white/15 px-3 text-[10px] font-bold uppercase tracking-[0.08em] text-white transition hover:border-white/35 hover:bg-white/[0.04] focus-visible:outline-offset-4 sm:min-h-11 sm:px-4 sm:text-[11px] sm:tracking-[0.1em]"
           >
-            Client login
+            <span className="sm:hidden">Login</span>
+            <span className="hidden sm:inline">Client login</span>
           </Link>
           <Link
             to="/contact"
@@ -123,13 +124,6 @@ export default function Navbar() {
                 {link.name}
               </NavLink>
             ))}
-            <Link
-              to="/login"
-              onClick={() => setIsOpen(false)}
-              className="block rounded-lg px-4 py-3 text-sm font-medium text-neutral-300 transition hover:bg-white/[0.04] hover:text-white"
-            >
-              Client login
-            </Link>
             <ConnectWithUs
               className="mt-2 border-t border-white/10 px-4 pt-4"
               onSelect={() => setIsOpen(false)}
