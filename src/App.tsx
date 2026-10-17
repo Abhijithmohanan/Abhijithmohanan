@@ -54,6 +54,9 @@ const NewMembershipRequest = lazy(() =>
 const AdminDashboard = lazy(() =>
   import('./pages/AdminConsole').then((page) => ({ default: page.AdminDashboard })),
 );
+const AdminMembershipApplications = lazy(() =>
+  import('./pages/AdminConsole').then((page) => ({ default: page.AdminMembershipApplications })),
+);
 const AdminMembers = lazy(() =>
   import('./pages/AdminConsole').then((page) => ({ default: page.AdminMembers })),
 );
@@ -113,6 +116,7 @@ function App() {
               </Route>
               <Route element={<ProtectedRoute admin />}>
                 <Route path="/admin" element={<AdminDashboard />} />
+                <Route path="/admin/membership-applications" element={<AdminMembershipApplications />} />
                 <Route path="/admin/requests/:requestId" element={<AdminRequestDetail />} />
                 <Route path="/admin/members" element={<AdminMembers />} />
                 <Route path="/admin/service-requests" element={<AdminServiceRequests />} />

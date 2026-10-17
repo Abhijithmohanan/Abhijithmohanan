@@ -29,10 +29,11 @@ export default function PortalFrame({
   const { user, isAdmin } = useAuth();
   const links = admin
     ? [
-        { to: '/admin', label: 'Requests', icon: ClipboardList },
+        { to: '/admin', label: 'Overview', icon: LayoutDashboard },
+        { to: '/admin/membership-applications', label: 'Membership applications', icon: ClipboardList },
         { to: '/admin/members', label: 'Members', icon: UserRound },
         { to: '/admin/service-requests', label: 'Service requests', icon: FilePlus2 },
-        { to: '/dashboard', label: 'Member console', icon: LayoutDashboard },
+        { to: '/dashboard', label: 'Member workspace', icon: LayoutDashboard },
       ]
     : [
         { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },

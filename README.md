@@ -49,7 +49,8 @@ profile; it does not create example memberships, requests, or notifications.
 4. Use the registration or Google sign-in button to create a member account. Members can submit and
    track membership applications, service briefs, and support requests from `/dashboard`. Members
    can read only their own request and notification records. Only a trusted administrator can access
-   review tools at `/admin` and `/admin/service-requests`.
+   the overview at `/admin`, the application queue at `/admin/membership-applications`, and service
+   request management at `/admin/service-requests`.
 5. To grant or revoke administrator access, install the Admin SDK as a local-only tool and configure
    Application Default Credentials for the Firebase project. Never commit a service-account key or
    enter an administrator email into the website:
@@ -102,6 +103,17 @@ Configure such a trusted server-side process before expecting automatic expiry r
 create those reminders from the member client. No additional client Firebase configuration or
 service-account credential is required for the dashboard. Continue to use the existing `vercel.json`
 SPA rewrite for Vercel deployment.
+
+### Administrator overview data
+
+The `/admin` overview uses Firestore count aggregations for membership applications and service
+requests by their recorded status. Its “Registered profiles” count is the number of documents in
+`users`; it is not a count of Firebase Authentication accounts because profile creation is not
+synchronized for every account. “Completed requests” counts records in `serviceRequests` with the
+`Completed` status. There is no separate projects collection, payments system, or admin notification
+inbox in this application, so the overview does not present those as existing business data.
+Recent submissions and review queues are live Firestore queries; status charts show aggregate
+counts rather than fabricated historical trends.
 
 ## Deploy to GitHub Pages
 
