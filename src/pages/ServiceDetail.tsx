@@ -3,6 +3,7 @@ import { ArrowRight, Check } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
 import NotFound from './NotFound';
 import { SITE_CONFIG } from '../config/site';
+import { useAuth } from '../contexts/AuthContext';
 
 const serviceStories = {
   'social-media-management': {
@@ -81,12 +82,15 @@ const serviceStories = {
 
 export default function ServiceDetail() {
   const { servicePath } = useParams();
+  const { user } = useAuth();
   const service = SITE_CONFIG.services.find((item) => item.path === servicePath);
   const story = servicePath ? serviceStories[servicePath as keyof typeof serviceStories] : undefined;
 
   if (!service || !story) return <NotFound />;
 
-  const serviceInquiry = `/contact?service=${encodeURIComponent(service.id)}`;
+  const serviceInquiry = user
+    ? `/service-requests/new?service=${encodeURIComponent(service.id)}`
+    : `/contact?service=${encodeURIComponent(service.id)}`;
 
   return (
     <>

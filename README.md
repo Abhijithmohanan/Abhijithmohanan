@@ -32,7 +32,9 @@ identified as fictional demonstrations, not client case studies.
 ## Firebase membership portal
 
 The site uses Firebase Authentication and Cloud Firestore for member accounts, membership
-applications, review history, and the administrator console.
+applications, service and support requests, notifications, review history, and the administrator
+console. The member workspace reuses the public site’s configured service catalogue and account
+profile; it does not create example memberships, requests, or notifications.
 
 1. In the Firebase project `blackhumorproductions-1774c`, enable Google sign-in and the email/password
    provider under **Authentication → Sign-in method**. Add the production site and local development
@@ -45,7 +47,9 @@ applications, review history, and the administrator console.
    ```
 
 4. Use the registration or Google sign-in button to create a member account. Members can submit and
-   track applications from the member console. Only a trusted administrator can access review tools.
+   track membership applications, service briefs, and support requests from `/dashboard`. Members
+   can read only their own request and notification records. Only a trusted administrator can access
+   review tools at `/admin` and `/admin/service-requests`.
 5. To grant or revoke administrator access, install the Admin SDK as a local-only tool and configure
    Application Default Credentials for the Firebase project. Never commit a service-account key or
    enter an administrator email into the website:
@@ -66,7 +70,38 @@ applications, review history, and the administrator console.
 
 The Firebase web configuration in `src/config/firebase.ts` identifies the public client project; it
 does not grant administrator access. `firestore.rules` denies all access outside the explicit
-member/admin rules above. Deploy rule changes before enabling the portal for production users.
+member/admin rules above. Deploy rule and index changes before enabling new member workflows in
+production.
+
+### Member workspace data
+
+- `users/{uid}` contains the signed-in user's profile. Members may update their own contact profile
+  fields; membership status, category, dates, reference ID, and configured `membershipBenefits`
+  are administrator-controlled. Benefits are omitted from the UI until an administrator records
+  them for an approved/active member.
+- `membershipRequests/{requestId}` and its `history` subcollection are the existing membership
+  application/review workflow. Members may submit an application and, when its status is
+  `More Information Required`, update only the requested additional-information field.
+- `serviceRequests/{requestId}` stores service and support briefs. Documents contain the owner's
+  UID, authenticated email, title, category, description, optional deadline/budget, status,
+  administrator message, member response, and server-managed timestamps. Members cannot change
+  status or administrator messages. Authorized administrators can update the status and response
+  message from `/admin/service-requests`.
+- `users/{uid}/notifications/{notificationId}` stores notification title/message, event type,
+  optional related record, server timestamp, and read state. A member can only read their own
+  notifications and mark an unread item as read. Submission notifications are committed atomically
+  with their corresponding request; administrator status/message notifications are written with
+  the related update.
+- Membership start date is recorded when an authorized administrator approves an application.
+  Expiry date, member reference ID, and category-specific benefits are shown only when trusted
+  administrator data exists; no default values are generated.
+
+The notification schema accepts a `membership_expiry_upcoming` event for a trusted backend
+sender, but this repository does not include a scheduled Cloud Function or other expiry scheduler.
+Configure such a trusted server-side process before expecting automatic expiry reminders; never
+create those reminders from the member client. No additional client Firebase configuration or
+service-account credential is required for the dashboard. Continue to use the existing `vercel.json`
+SPA rewrite for Vercel deployment.
 
 ## Deploy to GitHub Pages
 

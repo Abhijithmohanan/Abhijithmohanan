@@ -18,18 +18,39 @@ service cloud.firestore {
     function validUserProfile(userId) {
       return request.resource.data.keys().hasOnly([
           'uid', 'email', 'displayName', 'photoURL', 'membershipStatus',
-          'createdAt', 'updatedAt'
+          'membershipType', 'memberSince', 'membershipExpiresAt', 'memberId',
+          'membershipBenefits', 'createdAt', 'updatedAt'
         ])
         && request.resource.data.uid == userId
         && request.resource.data.email is string
         && request.resource.data.displayName is string
-        && request.resource.data.photoURL is string;
+        && request.resource.data.photoURL is string
+        && (!request.resource.data.keys().hasAny(['membershipStatus'])
+          || request.resource.data.membershipStatus is string)
+        && (!request.resource.data.keys().hasAny(['membershipType'])
+          || request.resource.data.membershipType is string)
+        && (!request.resource.data.keys().hasAny(['memberSince'])
+          || request.resource.data.memberSince is timestamp)
+        && (!request.resource.data.keys().hasAny(['membershipExpiresAt'])
+          || request.resource.data.membershipExpiresAt is timestamp)
+        && (!request.resource.data.keys().hasAny(['memberId'])
+          || request.resource.data.memberId is string)
+        && (!request.resource.data.keys().hasAny(['membershipBenefits'])
+          || request.resource.data.membershipBenefits is list);
+    }
+
+    function validInitialMemberProfile(userId) {
+      return request.resource.data.keys().hasOnly([
+          'uid', 'email', 'displayName', 'photoURL', 'membershipStatus',
+          'createdAt', 'updatedAt'
+        ])
+        && validUserProfile(userId);
     }
 
     match /users/{userId} {
       allow read: if ownsUser(userId) || isAdmin();
       allow create: if (ownsUser(userId)
-          && validUserProfile(userId)
+          && validInitialMemberProfile(userId)
           && request.resource.data.membershipStatus == 'Not Applied'
           && request.resource.data.createdAt == request.time
           && request.resource.data.updatedAt == request.time)
@@ -43,6 +64,58 @@ service cloud.firestore {
           && request.resource.data.email == request.auth.token.email
           && request.resource.data.updatedAt == request.time);
       allow delete: if isAdmin();
+
+      match /notifications/{notificationId} {
+        function validNotification() {
+          return request.resource.data.keys().hasOnly([
+              'type', 'title', 'message', 'relatedType', 'relatedId',
+              'createdAt', 'read', 'readAt'
+            ])
+            && request.resource.data.type in [
+              'membership_application_submitted', 'membership_status_changed',
+              'service_request_submitted', 'service_request_status_changed',
+              'admin_message', 'additional_information_requested',
+              'project_completed', 'membership_expiry_upcoming'
+            ]
+            && request.resource.data.title is string
+            && request.resource.data.title.size() > 0
+            && request.resource.data.title.size() <= 120
+            && request.resource.data.message is string
+            && request.resource.data.message.size() <= 1000
+            && request.resource.data.relatedType in ['', 'membership', 'serviceRequest']
+            && request.resource.data.relatedId is string
+            && request.resource.data.createdAt == request.time
+            && request.resource.data.read == false
+            && request.resource.data.readAt == null;
+        }
+
+        function isRequestSubmissionNotification() {
+          return (request.resource.data.type == 'membership_application_submitted'
+              && request.resource.data.relatedType == 'membership'
+              && existsAfter(/databases/$(database)/documents/membershipRequests/$(request.resource.data.relatedId))
+              && getAfter(/databases/$(database)/documents/membershipRequests/$(request.resource.data.relatedId)).data.userId == userId
+              && getAfter(/databases/$(database)/documents/membershipRequests/$(request.resource.data.relatedId)).data.status == 'Pending'
+              && getAfter(/databases/$(database)/documents/membershipRequests/$(request.resource.data.relatedId)).data.createdAt == request.time)
+            || (request.resource.data.type == 'service_request_submitted'
+              && request.resource.data.relatedType == 'serviceRequest'
+              && existsAfter(/databases/$(database)/documents/serviceRequests/$(request.resource.data.relatedId))
+              && getAfter(/databases/$(database)/documents/serviceRequests/$(request.resource.data.relatedId)).data.userId == userId
+              && getAfter(/databases/$(database)/documents/serviceRequests/$(request.resource.data.relatedId)).data.status == 'Submitted'
+              && getAfter(/databases/$(database)/documents/serviceRequests/$(request.resource.data.relatedId)).data.createdAt == request.time);
+        }
+
+        allow read: if ownsUser(userId) || isAdmin();
+        allow create: if validNotification()
+          && (isAdmin()
+            || (ownsUser(userId) && isRequestSubmissionNotification()));
+        allow update: if isAdmin()
+          || (ownsUser(userId)
+            && resource.data.read == false
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['read', 'readAt'])
+            && request.resource.data.read == true
+            && request.resource.data.readAt == request.time);
+        allow delete: if isAdmin();
+      }
     }
 
     match /membershipRequests/{requestId} {
@@ -81,6 +154,14 @@ service cloud.firestore {
         && request.resource.data.adminRemarks is string
         && request.resource.data.memberVisibleMessage is string
         && request.resource.data.updatedAt == request.time;
+      allow update: if ownsUser(resource.data.userId)
+        && resource.data.status == 'More Information Required'
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'additionalInformation', 'updatedAt'
+        ])
+        && request.resource.data.additionalInformation is string
+        && request.resource.data.additionalInformation.size() <= 2000
+        && request.resource.data.updatedAt == request.time;
       allow delete: if isAdmin();
 
       match /history/{eventId} {
@@ -113,6 +194,62 @@ service cloud.firestore {
               && parentRequestAfterWrite().data.status == 'Pending'));
         allow update, delete: if isAdmin();
       }
+    }
+
+    match /serviceRequests/{requestId} {
+      allow read: if isAdmin()
+        || (signedIn() && resource.data.userId == request.auth.uid);
+      allow create: if signedIn()
+        && request.resource.data.keys().hasOnly([
+          'userId', 'requesterName', 'requesterEmail', 'kind', 'title',
+          'category', 'description', 'deadline', 'budget', 'status',
+          'adminMessage', 'memberResponse', 'createdAt', 'updatedAt'
+        ])
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.requesterName is string
+        && request.resource.data.requesterName.size() <= 120
+        && request.resource.data.requesterEmail == request.auth.token.email
+        && request.resource.data.kind in ['service', 'support']
+        && request.resource.data.title is string
+        && request.resource.data.title.size() > 0
+        && request.resource.data.title.size() <= 120
+        && request.resource.data.category is string
+        && request.resource.data.category.size() > 0
+        && request.resource.data.category.size() <= 100
+        && request.resource.data.description is string
+        && request.resource.data.description.size() >= 20
+        && request.resource.data.description.size() <= 4000
+        && request.resource.data.deadline is string
+        && request.resource.data.deadline.size() <= 30
+        && request.resource.data.budget is string
+        && request.resource.data.budget.size() <= 80
+        && request.resource.data.status == 'Submitted'
+        && request.resource.data.adminMessage == ''
+        && request.resource.data.memberResponse == ''
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.updatedAt == request.time;
+      allow update: if isAdmin()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'status', 'adminMessage', 'updatedAt'
+        ])
+        && request.resource.data.status in [
+          'Submitted', 'Under Review', 'Awaiting Information', 'Approved',
+          'In Progress', 'Completed', 'Rejected', 'Cancelled'
+        ]
+        && request.resource.data.adminMessage is string
+        && request.resource.data.adminMessage.size() <= 2000
+        && request.resource.data.updatedAt == request.time;
+      allow update: if signedIn()
+        && resource.data.userId == request.auth.uid
+        && resource.data.status == 'Awaiting Information'
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'memberResponse', 'updatedAt'
+        ])
+        && request.resource.data.memberResponse is string
+        && request.resource.data.memberResponse.size() >= 5
+        && request.resource.data.memberResponse.size() <= 2000
+        && request.resource.data.updatedAt == request.time;
+      allow delete: if isAdmin();
     }
 
     match /{document=**} {

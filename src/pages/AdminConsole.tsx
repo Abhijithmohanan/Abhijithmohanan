@@ -16,6 +16,7 @@ import { Link, useParams } from 'react-router-dom';
 import { getDatabase } from '../config/firebase';
 import { useAuth } from '../contexts/AuthContext';
 import {
+  MEMBER_ACCOUNT_STATUSES,
   MEMBERSHIP_STATUSES,
   formatDate,
   statusTone,
@@ -237,6 +238,11 @@ export function AdminRequestDetail() {
       const updatedAt = serverTimestamp();
       const profileRef = doc(db, 'users', request.userId);
       const profileSnapshot = await getDoc(profileRef);
+      const profileUpdate: Record<string, unknown> = { membershipStatus: status, updatedAt };
+      if (status === 'Approved') {
+        profileUpdate.membershipType = request.membershipType;
+        profileUpdate.memberSince = profileSnapshot.data()?.memberSince ?? serverTimestamp();
+      }
       batch.update(doc(db, 'membershipRequests', requestId), {
         status,
         adminRemarks: adminRemarks.trim(),
@@ -244,13 +250,16 @@ export function AdminRequestDetail() {
         updatedAt,
       });
       batch.set(profileRef, profileSnapshot.exists()
-        ? { membershipStatus: status, updatedAt }
+        ? profileUpdate
         : {
             uid: request.userId,
             email: request.applicantEmail,
             displayName: request.applicantName,
             photoURL: '',
             membershipStatus: status,
+            ...(status === 'Approved'
+              ? { membershipType: request.membershipType, memberSince: serverTimestamp() }
+              : {}),
             createdAt: serverTimestamp(),
             updatedAt,
           }, { merge: true });
@@ -265,6 +274,36 @@ export function AdminRequestDetail() {
           changedBy: user.uid,
           timestamp: serverTimestamp(),
           message: memberMessage.trim(),
+        });
+      }
+
+      if (
+        request.status !== status ||
+        request.memberVisibleMessage !== memberMessage.trim()
+      ) {
+        const notificationType = request.status !== status
+          ? status === 'More Information Required'
+            ? 'additional_information_requested'
+            : 'membership_status_changed'
+          : 'admin_message';
+        const notificationTitle = notificationType === 'admin_message'
+          ? 'New message from the studio'
+          : status === 'Approved'
+            ? 'Membership application approved'
+            : status === 'Rejected'
+              ? 'Membership application decision'
+              : notificationType === 'additional_information_requested'
+                ? 'More information is needed'
+                : 'Membership application updated';
+        batch.set(doc(collection(db, 'users', request.userId, 'notifications')), {
+          type: notificationType,
+          title: notificationTitle,
+          message: (memberMessage.trim() || `Your membership application status is now ${status}.`).slice(0, 1000),
+          relatedType: 'membership',
+          relatedId: requestId,
+          createdAt: serverTimestamp(),
+          read: false,
+          readAt: null,
         });
       }
 
@@ -364,15 +403,38 @@ export function AdminMembers() {
 
   const updateMemberStatus = async (member: AdminMember, membershipStatus: string) => {
     if (!user) return;
+    if (member.membershipStatus === membershipStatus) {
+      setNotice('That member already has this status.');
+      return;
+    }
+    if (!MEMBER_ACCOUNT_STATUSES.some((status) => status === membershipStatus)) return;
     setBusyUid(member.uid);
     setNotice('');
     setError('');
     try {
       const db = await getDatabase();
-      await updateDoc(doc(db, 'users', member.uid), {
+      const batch = writeBatch(db);
+      batch.update(doc(db, 'users', member.uid), {
         membershipStatus,
         updatedAt: serverTimestamp(),
       });
+      batch.set(doc(collection(db, 'users', member.uid, 'notifications')), {
+        type: 'membership_status_changed',
+        title: membershipStatus === 'Approved'
+          ? 'Membership application approved'
+          : membershipStatus === 'Active'
+            ? 'Membership is active'
+            : membershipStatus === 'Rejected'
+              ? 'Membership application decision'
+              : 'Membership status updated',
+        message: `Your membership status is now ${membershipStatus}.`,
+        relatedType: 'membership',
+        relatedId: '',
+        createdAt: serverTimestamp(),
+        read: false,
+        readAt: null,
+      });
+      await batch.commit();
       setNotice(`Updated membership status for ${member.displayName || member.email}.`);
     } catch (updateError) {
       setError(updateError instanceof FirebaseError && updateError.code === 'permission-denied'
@@ -423,8 +485,7 @@ export function AdminMembers() {
                     onChange={(event) => void updateMemberStatus(member, event.target.value)}
                     className="min-h-10 border border-white/15 bg-brand-dark px-3 text-xs text-white disabled:opacity-60"
                   >
-                    <option>Not Applied</option>
-                    {MEMBERSHIP_STATUSES.map((status) => <option key={status}>{status}</option>)}
+                    {MEMBER_ACCOUNT_STATUSES.map((status) => <option key={status}>{status}</option>)}
                   </select>
                 </label>
               </li>

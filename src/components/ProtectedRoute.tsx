@@ -1,4 +1,4 @@
-import { Navigate, Outlet, useLocation } from 'react-router-dom';
+import { Link, Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
 export default function ProtectedRoute({ admin = false }: { admin?: boolean }) {
@@ -15,6 +15,16 @@ export default function ProtectedRoute({ admin = false }: { admin?: boolean }) {
     );
   }
 
+  if (error) {
+    return (
+      <div className="mx-auto max-w-xl px-5 py-16 text-center">
+        <p role="alert" className="text-sm text-brand-red">{error}</p>
+        <Link to={admin ? '/admin/login' : '/login'} className="mt-5 inline-flex min-h-11 items-center justify-center rounded-full bg-brand-button px-5 text-xs font-bold uppercase tracking-[0.1em] text-white hover:bg-brand-button-hover">
+          Sign in again
+        </Link>
+      </div>
+    );
+  }
   if (!user) {
     return (
       <Navigate
@@ -22,13 +32,6 @@ export default function ProtectedRoute({ admin = false }: { admin?: boolean }) {
         replace
         state={{ from: location }}
       />
-    );
-  }
-  if (error) {
-    return (
-      <div className="mx-auto max-w-xl px-5 py-16 text-center">
-        <p role="alert" className="text-sm text-brand-red">{error}</p>
-      </div>
     );
   }
   if (admin && !isAdmin) return <Navigate to="/access-denied" replace />;

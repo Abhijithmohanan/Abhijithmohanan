@@ -1,8 +1,11 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { ArrowRight, ArrowUpRight, ChevronDown, Menu, Phone, X } from 'lucide-react';
+import { signOut } from 'firebase/auth';
+import { auth } from '../config/firebase';
 import { SITE_CONFIG } from '../config/site';
 import { assetUrl } from '../config/assets';
+import { useAuth } from '../contexts/AuthContext';
 
 const links = [
   { name: 'Home', path: '/' },
@@ -19,7 +22,10 @@ const linkClass = ({ isActive }: { isActive: boolean }) =>
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isSigningOut, setIsSigningOut] = useState(false);
+  const [signOutError, setSignOutError] = useState('');
   const location = useLocation();
+  const { user, isAdmin, isLoading } = useAuth();
 
   useEffect(() => {
     setIsOpen(false);
@@ -35,6 +41,29 @@ export default function Navbar() {
     window.addEventListener('keydown', closeOnEscape);
     return () => window.removeEventListener('keydown', closeOnEscape);
   }, [isOpen]);
+
+  const handleSignOut = async () => {
+    setIsSigningOut(true);
+    setSignOutError('');
+    try {
+      await signOut(auth);
+      setIsOpen(false);
+    } catch (error) {
+      console.error('Could not sign out:', error);
+      setSignOutError('Could not sign out. Please try again.');
+    } finally {
+      setIsSigningOut(false);
+    }
+  };
+
+  const accountActions = (
+    <AccountActions
+      isAdmin={isAdmin}
+      isSigningOut={isSigningOut}
+      signOutError={signOutError}
+      onSignOut={handleSignOut}
+    />
+  );
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-brand-dark/90 backdrop-blur-xl">
@@ -80,12 +109,31 @@ export default function Navbar() {
 
         <div className="ml-auto flex shrink-0 items-center gap-2 sm:gap-3 xl:ml-0">
           <ConnectWithUs className="hidden xl:block" />
-          <Link
-            to="/login"
-            className="inline-flex min-h-10 shrink-0 items-center justify-center rounded-full border border-white/15 px-3 text-[10px] font-bold uppercase tracking-[0.08em] text-white transition hover:border-white/35 hover:bg-white/[0.04] focus-visible:outline-offset-4 sm:min-h-11 sm:px-4 sm:text-[11px] sm:tracking-[0.1em]"
-          >
-            Login
-          </Link>
+          {!isLoading && !user && (
+            <Link
+              to="/login"
+              className="inline-flex min-h-10 shrink-0 items-center justify-center rounded-full border border-white/15 px-3 text-[10px] font-bold uppercase tracking-[0.08em] text-white transition hover:border-white/35 hover:bg-white/[0.04] focus-visible:outline-offset-4 sm:min-h-11 sm:px-4 sm:text-[11px] sm:tracking-[0.1em]"
+            >
+              Login
+            </Link>
+          )}
+          {!isLoading && user && (
+            <>
+              <details className="group relative hidden xl:block">
+                <summary className="inline-flex min-h-11 cursor-pointer list-none items-center justify-center gap-2 rounded-full border border-white/15 px-4 text-[11px] font-bold uppercase tracking-[0.1em] text-white transition hover:border-white/35 hover:bg-white/[0.04] focus-visible:outline-offset-4">
+                  Account{' '}
+                  <ChevronDown
+                    size={14}
+                    aria-hidden="true"
+                    className="transition group-open:rotate-180"
+                  />
+                </summary>
+                <div className="absolute right-0 top-full z-50 mt-3 w-56 border border-white/10 bg-[#151517] p-2 shadow-2xl shadow-black/40">
+                  {accountActions}
+                </div>
+              </details>
+            </>
+          )}
           <Link
             to="/contact"
             className="hidden min-h-11 items-center justify-center gap-2 rounded-full bg-brand-button px-4 text-[10px] font-bold uppercase tracking-[0.1em] text-white transition hover:bg-brand-button-hover focus-visible:outline-offset-4 xl:inline-flex 2xl:px-5 2xl:text-[11px]"
@@ -124,6 +172,14 @@ export default function Navbar() {
                 {link.name}
               </NavLink>
             ))}
+            {!isLoading && user && (
+              <div className="mt-3 border-t border-white/10 pt-3">
+                <p className="px-4 pb-2 text-[10px] font-bold uppercase tracking-[0.16em] text-neutral-500">
+                  Your account
+                </p>
+                {accountActions}
+              </div>
+            )}
             <ConnectWithUs
               className="mt-2 border-t border-white/10 px-4 pt-4"
               onSelect={() => setIsOpen(false)}
@@ -139,6 +195,47 @@ export default function Navbar() {
         </div>
       )}
     </header>
+  );
+}
+
+function AccountActions({
+  isAdmin,
+  isSigningOut,
+  signOutError,
+  onSignOut,
+}: {
+  isAdmin: boolean;
+  isSigningOut: boolean;
+  signOutError: string;
+  onSignOut: () => void;
+}) {
+  const actionClass =
+    'block w-full rounded-lg px-3 py-3 text-left text-sm font-medium text-neutral-300 transition hover:bg-white/[0.05] hover:text-white';
+
+  return (
+    <>
+      <Link to="/dashboard" className={actionClass}>
+        Member dashboard
+      </Link>
+      {isAdmin && (
+        <Link to="/admin" className={actionClass}>
+          Admin Console
+        </Link>
+      )}
+      <button
+        type="button"
+        onClick={onSignOut}
+        disabled={isSigningOut}
+        className={`${actionClass} border-t border-white/10 text-neutral-400 disabled:cursor-wait disabled:opacity-60`}
+      >
+        {isSigningOut ? 'Signing out…' : 'Sign out'}
+      </button>
+      {signOutError && (
+        <p role="alert" className="px-3 py-2 text-xs leading-5 text-brand-red">
+          {signOutError}
+        </p>
+      )}
+    </>
   );
 }
 

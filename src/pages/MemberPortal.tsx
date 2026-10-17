@@ -7,6 +7,7 @@ import {
   orderBy,
   query,
   serverTimestamp,
+  updateDoc,
   where,
   writeBatch,
   type Timestamp,
@@ -356,6 +357,16 @@ export function NewMembershipRequest() {
         timestamp: serverTimestamp(),
         message: 'Membership request submitted.',
       });
+      batch.set(doc(collection(db, 'users', user.uid, 'notifications')), {
+        type: 'membership_application_submitted',
+        title: 'Membership application submitted',
+        message: 'Your membership application has been submitted for review.',
+        relatedType: 'membership',
+        relatedId: requestRef.id,
+        createdAt: serverTimestamp(),
+        read: false,
+        readAt: null,
+      });
       await batch.commit();
       setCreatedId(requestRef.id);
       form.reset();
@@ -510,6 +521,9 @@ export function MembershipRequestDetail({
   const [history, setHistory] = useState<RequestHistory[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [additionalInformation, setAdditionalInformation] = useState('');
+  const [isSavingInformation, setIsSavingInformation] = useState(false);
+  const [informationNotice, setInformationNotice] = useState('');
 
   useEffect(() => {
     if (!user || !requestId) return;
@@ -528,6 +542,9 @@ export function MembershipRequestDetail({
               return;
             }
             setRequest({ id: snapshot.id, ...snapshot.data() } as MembershipRequest);
+            setAdditionalInformation(
+              (snapshot.data().additionalInformation as string | undefined) ?? '',
+            );
             setLoading(false);
             setError('');
           },
@@ -569,6 +586,26 @@ export function MembershipRequestDetail({
     </PortalFrame>
   );
 
+  const submitAdditionalInformation = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!request || !requestId || adminView || !user) return;
+    setIsSavingInformation(true);
+    setInformationNotice('');
+    setError('');
+    try {
+      const db = await getDatabase();
+      await updateDoc(doc(db, 'membershipRequests', requestId), {
+        additionalInformation: additionalInformation.trim(),
+        updatedAt: serverTimestamp(),
+      });
+      setInformationNotice('Your information has been sent to the studio.');
+    } catch (saveError) {
+      setError(getErrorMessage(saveError));
+    } finally {
+      setIsSavingInformation(false);
+    }
+  };
+
   if (loading) return frame(<p role="status" className="text-sm text-neutral-400">Loading request…</p>);
   if (error) return frame(<ErrorMessage>{error}</ErrorMessage>);
   if (!request) return frame(<ErrorMessage>This request is unavailable.</ErrorMessage>);
@@ -594,6 +631,25 @@ export function MembershipRequestDetail({
         <Detail label="Reason" value={request.reason} className="mt-6" />
         {request.additionalInformation && (
           <Detail label="Additional information" value={request.additionalInformation} className="mt-6" />
+        )}
+        {!adminView && request.status === 'More Information Required' && (
+          <form onSubmit={submitAdditionalInformation} className="mt-6 border-t border-white/10 pt-5">
+            <label htmlFor="additionalInformationReply" className="mb-2 block text-xs font-semibold text-neutral-300">
+              Provide the requested information
+            </label>
+            <textarea
+              id="additionalInformationReply"
+              value={additionalInformation}
+              onChange={(event) => setAdditionalInformation(event.target.value)}
+              maxLength={2000}
+              rows={4}
+              className={`${inputClass} py-3`}
+            />
+            {informationNotice && <p role="status" className="mt-3 text-xs text-emerald-300">{informationNotice}</p>}
+            <button type="submit" disabled={isSavingInformation} className="mt-4 min-h-10 rounded-lg bg-brand-button px-4 text-xs font-bold text-white hover:bg-brand-button-hover disabled:opacity-60">
+              {isSavingInformation ? 'Sending…' : 'Send information'}
+            </button>
+          </form>
         )}
         {request.memberVisibleMessage && (
           <div className="mt-6 border-l-2 border-brand-gold pl-4">
@@ -644,11 +700,15 @@ function Detail({ label, value, className = '' }: { label: string; value: string
 export function MemberProfile() {
   const { user } = useAuth();
   const profile = useMemberProfile(user?.uid);
+  const requests = useMemberRequests(user?.uid);
   const [name, setName] = useState(user?.displayName ?? '');
   const [message, setMessage] = useState('');
   const [isBusy, setIsBusy] = useState(false);
 
   useEffect(() => setName(profile.data?.displayName ?? user?.displayName ?? ''), [profile.data?.displayName, user?.displayName]);
+  const membershipStatus = profile.data?.membershipStatus && profile.data.membershipStatus !== 'Not Applied'
+    ? profile.data.membershipStatus
+    : requests.data[0]?.status ?? profile.data?.membershipStatus ?? 'Not Applied';
 
   const saveProfile = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -688,7 +748,7 @@ export function MemberProfile() {
           {user?.photoURL && <img src={user.photoURL} alt="" className="h-16 w-16 rounded-full object-cover" />}
           <Field label="Full name" name="profileName" value={name} onChange={(event) => setName(event.target.value)} required maxLength={120} />
           <Field label="Email address" name="profileEmail" type="email" value={user?.email ?? ''} disabled required />
-          <Field label="Membership status" name="profileStatus" value={profile.data?.membershipStatus ?? 'Not Applied'} disabled />
+          <Field label="Membership status" name="profileStatus" value={membershipStatus} disabled />
           {message && <p role="status" className="text-sm text-brand-gold">{message}</p>}
           <button type="submit" disabled={isBusy} className="min-h-11 rounded-full bg-brand-button px-5 text-xs font-bold uppercase tracking-[0.1em] text-white disabled:opacity-60">
             {isBusy ? 'Saving…' : 'Save profile'}

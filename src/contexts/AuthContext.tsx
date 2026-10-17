@@ -33,6 +33,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           return;
         }
 
+        if (active) {
+          setState((current) => ({
+            ...current,
+            user,
+            isAdmin: false,
+            isLoading: current.user?.uid === user.uid ? current.isLoading : true,
+            error: '',
+          }));
+        }
+
         try {
           const token = await user.getIdTokenResult();
           if (active && updateId === latestUpdate) {

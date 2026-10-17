@@ -19,7 +19,25 @@ const AccessDenied = lazy(() =>
   import('./pages/MemberPortal').then((page) => ({ default: page.AccessDenied })),
 );
 const MemberDashboard = lazy(() =>
-  import('./pages/MemberPortal').then((page) => ({ default: page.MemberDashboard })),
+  import('./pages/MemberWorkspace').then((page) => ({ default: page.MemberDashboard })),
+);
+const MyRequests = lazy(() =>
+  import('./pages/MemberWorkspace').then((page) => ({ default: page.MyRequests })),
+);
+const NewServiceRequest = lazy(() =>
+  import('./pages/MemberWorkspace').then((page) => ({ default: page.NewServiceRequest })),
+);
+const ServiceRequestDetail = lazy(() =>
+  import('./pages/MemberWorkspace').then((page) => ({ default: page.ServiceRequestDetail })),
+);
+const NotificationsPage = lazy(() =>
+  import('./pages/MemberWorkspace').then((page) => ({ default: page.NotificationsPage })),
+);
+const MembershipBenefits = lazy(() =>
+  import('./pages/MemberWorkspace').then((page) => ({ default: page.MembershipBenefits })),
+);
+const HelpSupport = lazy(() =>
+  import('./pages/MemberWorkspace').then((page) => ({ default: page.HelpSupport })),
 );
 const MemberProfile = lazy(() =>
   import('./pages/MemberPortal').then((page) => ({ default: page.MemberProfile })),
@@ -38,6 +56,9 @@ const AdminDashboard = lazy(() =>
 );
 const AdminMembers = lazy(() =>
   import('./pages/AdminConsole').then((page) => ({ default: page.AdminMembers })),
+);
+const AdminServiceRequests = lazy(() =>
+  import('./pages/MemberWorkspace').then((page) => ({ default: page.AdminServiceRequests })),
 );
 const AdminRequestDetail = lazy(() =>
   import('./pages/AdminConsole').then((page) => ({ default: page.AdminRequestDetail })),
@@ -79,6 +100,12 @@ function App() {
               <Route path="/access-denied" element={<AccessDenied />} />
               <Route element={<ProtectedRoute />}>
                 <Route path="/dashboard" element={<MemberDashboard />} />
+                <Route path="/my-requests" element={<MyRequests />} />
+                <Route path="/service-requests/new" element={<NewServiceRequest />} />
+                <Route path="/service-requests/:requestId" element={<ServiceRequestDetail />} />
+                <Route path="/notifications" element={<NotificationsPage />} />
+                <Route path="/benefits" element={<MembershipBenefits />} />
+                <Route path="/help" element={<HelpSupport />} />
                 <Route path="/profile" element={<MemberProfile />} />
                 <Route path="/requests" element={<MembershipRequests />} />
                 <Route path="/requests/new" element={<NewMembershipRequest />} />
@@ -88,6 +115,7 @@ function App() {
                 <Route path="/admin" element={<AdminDashboard />} />
                 <Route path="/admin/requests/:requestId" element={<AdminRequestDetail />} />
                 <Route path="/admin/members" element={<AdminMembers />} />
+                <Route path="/admin/service-requests" element={<AdminServiceRequests />} />
               </Route>
               <Route path="*" element={<NotFound />} />
             </Routes>

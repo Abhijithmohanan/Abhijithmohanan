@@ -3,20 +3,17 @@ import { FirebaseError } from 'firebase/app';
 import {
   createUserWithEmailAndPassword,
   getAdditionalUserInfo,
-  onAuthStateChanged,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
   updateProfile,
-  type User,
 } from 'firebase/auth';
 import { Helmet } from 'react-helmet-async';
 import { ArrowRight, LockKeyhole } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { SITE_CONFIG } from '../config/site';
 import { auth, googleProvider } from '../config/firebase';
-import { assetUrl } from '../config/assets';
 import { useAuth } from '../contexts/AuthContext';
 import { ensureMemberProfile } from '../services/memberService';
 
@@ -79,16 +76,14 @@ export default function AuthPage({
   adminEntry?: boolean;
 }) {
   const isRegister = mode === 'register';
-  const { user: authUser, isAdmin, isLoading: isCheckingSession } = useAuth();
+  const { user, isAdmin, isLoading: isCheckingSession } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const [user, setUser] = useState<User | null>(null);
-  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const [isBusy, setIsBusy] = useState(false);
   const [notice, setNotice] = useState<Notice | null>(null);
 
   useEffect(() => {
-    if (isCheckingSession || !authUser) return;
+    if (isCheckingSession || !user) return;
 
     if (adminEntry && !isAdmin) {
       navigate('/access-denied', { replace: true });
@@ -100,23 +95,7 @@ export default function AuthPage({
       : (location.state as AuthPageLocationState | null)?.from?.pathname ??
         (isAdmin ? '/admin' : '/dashboard');
     navigate(destination, { replace: true });
-  }, [adminEntry, authUser, isAdmin, isCheckingSession, location.state, navigate]);
-
-  useEffect(
-    () =>
-      onAuthStateChanged(
-        auth,
-        (currentUser) => {
-          setUser(currentUser);
-          setIsCheckingAuth(false);
-        },
-        (error) => {
-          setNotice({ type: 'error', text: getAuthErrorMessage(error) });
-          setIsCheckingAuth(false);
-        },
-      ),
-    [],
-  );
+  }, [adminEntry, user, isAdmin, isCheckingSession, location.state, navigate]);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -252,25 +231,6 @@ export default function AuthPage({
         />
 
         <div className="w-full max-w-[440px] border border-white/10 bg-[#151517] p-6 shadow-2xl shadow-black/20 sm:p-10">
-          <div className="mb-8 flex items-center gap-3">
-            <img
-              src={assetUrl('images/black-humor-productions-logo.png')}
-              alt=""
-              width="48"
-              height="48"
-              className="h-11 w-11 object-contain"
-            />
-            <span className="h-8 w-px bg-brand-red" aria-hidden="true" />
-            <div>
-              <p className="font-display text-xs font-extrabold tracking-[0.08em] text-white">
-                BLACK <span className="text-brand-red">HUMOR</span>
-              </p>
-              <p className="mt-1 text-[9px] font-bold uppercase tracking-[0.22em] text-neutral-500">
-                Productions
-              </p>
-            </div>
-          </div>
-
           <h1 className="font-display text-3xl font-extrabold leading-tight tracking-[-0.05em] text-white">
             {isRegister ? 'Create your account.' : 'Login.'}
           </h1>
@@ -280,7 +240,7 @@ export default function AuthPage({
               : 'Sign in to your Black Humor Productions account.'}
           </p>
 
-          {isCheckingAuth ? (
+          {isCheckingSession ? (
             <p role="status" className="mt-8 text-sm text-neutral-400">
               Checking your session…
             </p>
