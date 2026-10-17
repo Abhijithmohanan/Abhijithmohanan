@@ -1102,10 +1102,12 @@ export function AdminServiceRequests() {
     <PortalFrame admin title="Service requests">
       {notice && <p role="status" className="mb-4 text-sm text-emerald-300">{notice}</p>}
       {error ? <WorkspaceError text={error} retry={() => setReloadId((value) => value + 1)} /> : loading ? <LoadingRows label="Loading service requests…" /> : requests.length ? (
-        <ul className="space-y-4">
-          {requests.map((request) => <AdminServiceRequestCard key={request.id} request={request} disabled={isBusy === request.id} onSave={(status, message) => void updateStatus(request, status, message)} />)}
-        </ul>
-        {requests.length === pageSize && <button type="button" onClick={() => setPageSize((size) => size + 50)} className="mt-4 min-h-10 rounded-lg border border-white/15 px-4 text-xs font-semibold text-white hover:border-white/30">Load more requests</button>}
+        <>
+          <ul className="space-y-4">
+            {requests.map((request) => <AdminServiceRequestCard key={request.id} request={request} disabled={isBusy === request.id} onSave={(status, message) => void updateStatus(request, status, message)} />)}
+          </ul>
+          {requests.length === pageSize && <button type="button" onClick={() => setPageSize((size) => size + 50)} className="mt-4 min-h-10 rounded-lg border border-white/15 px-4 text-xs font-semibold text-white hover:border-white/30">Load more requests</button>}
+        </>
       ) : <EmptyState title="No service requests" text="Member project and support requests will appear here when submitted." />}
     </PortalFrame>
   );
