@@ -11,9 +11,9 @@ import { assetUrl } from './assets';
 
 export const SITE_CONFIG = {
   name: 'Black Humor Productions',
-  location: 'Nooranad, near Police Station, Kerala, India',
+  location: 'Nooranad, Kerala, India',
   mapLink:
-    'https://www.google.com/maps/search/?api=1&query=Nooranad%20Police%20Station%2C%20Kerala%2C%20India',
+    'https://maps.app.goo.gl/ZMaASMnuR5SYd4QbA',
   email: 'blackhumorproductions@outlook.com',
   phone: '+91 9544 405 504',
   phoneDisplay: '9544 405 504',
