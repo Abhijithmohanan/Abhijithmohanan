@@ -8,7 +8,6 @@ import {
   orderBy,
   query,
   serverTimestamp,
-  updateDoc,
   writeBatch,
 } from 'firebase/firestore';
 import { ArrowRight, Search } from 'lucide-react';

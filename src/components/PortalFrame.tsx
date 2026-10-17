@@ -10,7 +10,7 @@ import {
   UserRound,
 } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
-import { Link, NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { auth } from '../config/firebase';
 import { useAuth } from '../contexts/AuthContext';
 import { SITE_CONFIG } from '../config/site';
